@@ -9,26 +9,28 @@ import javax.persistence.*;
 @NoArgsConstructor
 @ToString
 @AllArgsConstructor
+@Getter
+@Setter
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Getter @Setter private int id;
+    private int id;
 
     @Column(unique = true, nullable = false)
-    @Getter @Setter private String username;
+    private String username;
 
     @Column(nullable = false, length = 50)
-    @Getter @Setter private String password;
+    private String password;
 
     @Column
-    @Getter @Setter private String firstName;
+    private String firstName;
 
     @Column
-    @Getter @Setter private String lastName;
+    private String lastName;
 
     @Column(unique = true, nullable = false)
-    @Getter @Setter private String email;
+    private String email;
 
     @Column(nullable = false)
-    @Getter @Setter private String userRole;
+    private String userRole;
 }
