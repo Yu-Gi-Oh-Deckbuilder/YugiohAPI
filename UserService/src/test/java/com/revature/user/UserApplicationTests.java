@@ -1,10 +1,10 @@
-package com.revature.YuGiOhDeckBuilder;
+package com.revature.user;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class YuGiOhDeckBuilderApplicationTests {
+class UserApplicationTests {
 
 	@Test
 	void contextLoads() {

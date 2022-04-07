@@ -13,7 +13,7 @@ configurations {
 
 
 application {
-	mainClass = 'com.revature.YuGiOhDeckBuilder.YuGiOhDeckBuilderApplication'
+	mainClass = 'com.revature.user.UserApplication'
 }
 
 ext {

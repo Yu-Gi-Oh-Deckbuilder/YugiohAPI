@@ -1,10 +1,10 @@
-package com.revature.YuGiOhDeckBuilder.controller;
+package com.revature.user.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import com.revature.YuGiOhDeckBuilder.model.User;
-import com.revature.YuGiOhDeckBuilder.service.UserService;
+import com.revature.user.model.User;
+import com.revature.user.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

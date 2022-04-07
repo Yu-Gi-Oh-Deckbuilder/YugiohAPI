@@ -1,7 +1,7 @@
-package com.revature.YuGiOhDeckBuilder.service;
+package com.revature.user.service;
 
-import com.revature.YuGiOhDeckBuilder.model.User;
-import com.revature.YuGiOhDeckBuilder.repository.UserRepository;
+import com.revature.user.model.User;
+import com.revature.user.repository.UserRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

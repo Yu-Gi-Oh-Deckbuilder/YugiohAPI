@@ -1,4 +1,4 @@
-package com.revature.YuGiOhDeckBuilder.model;
+package com.revature.user.model;
 
 import lombok.*;
 

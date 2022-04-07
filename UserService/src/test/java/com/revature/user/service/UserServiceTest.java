@@ -1,7 +1,7 @@
-package com.revature.YuGiOhDeckBuilder.service;
+package com.revature.user.service;
 
-import com.revature.YuGiOhDeckBuilder.model.User;
-import com.revature.YuGiOhDeckBuilder.repository.UserRepository;
+import com.revature.user.model.User;
+import com.revature.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
