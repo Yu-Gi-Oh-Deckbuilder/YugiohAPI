@@ -1,2 +1,1 @@
-rootProject.name = 'YuGiOhDeckBuilder'
-include 'UserService', 'GatewayService'
+rootProject.name = 'yugiohdeckbuilder'
