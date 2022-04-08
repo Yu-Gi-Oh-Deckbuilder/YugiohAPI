@@ -19,7 +19,6 @@ application {
 	mainClass = 'com.revature.main.YuGiOhDeckBuilderApplication'
 }
 
-
 repositories {
 	mavenCentral()
 }
