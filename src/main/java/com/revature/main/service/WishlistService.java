@@ -23,6 +23,9 @@ import java.util.List;
 public class WishlistService extends EntityService{
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private WishlistRepository wishlistRepository;
 
     public List<Wishlist> getAllWishlistByUserId(int id) throws UserNotFoundException {
