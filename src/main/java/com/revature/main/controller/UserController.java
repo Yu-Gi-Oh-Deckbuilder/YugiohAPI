@@ -5,11 +5,9 @@ import com.revature.main.service.UserService;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.security.InvalidParameterException;
 import java.util.List;
 
 @Profile("prod")
@@ -34,4 +32,19 @@ public class UserController {
     public User getUserById(@PathVariable("id") int id) {
         return userService.getUserById(id);
     }
+
+    @DeleteMapping("/{id}")
+    public boolean deleteUserById(@PathVariable("id") int id) {
+        boolean result = userService.deleteUserById(id);
+        if (result == false){
+            throw new InvalidParameterException("The User attempted to be deleted doesn't exist");
+        }
+        return result;
+    }
+
+    @PostMapping
+    public User updateUser(@PathVariable("id") int id){
+        return null;
+    }
+
 }

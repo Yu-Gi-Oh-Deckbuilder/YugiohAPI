@@ -9,6 +9,7 @@ import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.security.InvalidParameterException;
 import java.util.List;
 
 @Service
@@ -31,7 +32,7 @@ public class UserService {
         return userRepository.getById(id);
     }
 
-    public boolean deleteUserById(int id) {
+    public boolean deleteUserById(int id){
       User user = userRepository.getById(id);
        if ( user == null){
            return false;
@@ -51,6 +52,7 @@ public class UserService {
         user.setLastName(userDto.getLastName());
         user.setPassword(userDto.getPassword());
         user.setEmail(userDto.getEmail());
+
 
         return user;
     }
