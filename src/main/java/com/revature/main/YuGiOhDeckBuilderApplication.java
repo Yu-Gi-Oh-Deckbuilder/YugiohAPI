@@ -11,5 +11,4 @@ public class YuGiOhDeckBuilderApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(YuGiOhDeckBuilderApplication.class, args);
 	}
-
 }
