@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../app.state';
 import { User } from './model/user.model';
 import { AuthActions } from './state';
+import { environment } from 'src/environments/environment'
 
 @Injectable({
   providedIn: 'root'
@@ -21,4 +22,7 @@ export class AuthService {
      this.store.dispatch(AuthActions.login({username: username, password: password}));
    }
 
+   authenticate(username: string, password: string) {
+     return this.http.post<User>(`${environment.apiUrl}/login`, {username, password}, {observe: 'response'});
+   }
 }
