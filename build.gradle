@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.6.6'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'application'
 }
 
 group = 'com.revature'
@@ -13,6 +14,11 @@ configurations {
 		extendsFrom annotationProcessor
 	}
 }
+
+application {
+	mainClass = 'com.revature.main.YuGiOhDeckBuilderApplication'
+}
+
 
 repositories {
 	mavenCentral()
