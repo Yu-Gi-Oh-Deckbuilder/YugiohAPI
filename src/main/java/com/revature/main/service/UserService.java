@@ -1,16 +1,12 @@
 package com.revature.main.service;
 
-import com.revature.main.dao.UserRepository;
 import com.revature.main.dto.UserDto;
 import com.revature.main.exceptions.UserNotFoundException;
 import com.revature.main.model.User;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.security.InvalidParameterException;
 import java.util.List;
 
 @Service
@@ -45,7 +41,6 @@ public class UserService extends EntityService{
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setEmail(userDto.getEmail());
-
 
         return user;
     }
