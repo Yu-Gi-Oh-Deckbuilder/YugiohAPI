@@ -1,5 +1,6 @@
 package com.revature.main.controller;
 
+import com.revature.main.exceptions.UserNotFoundException;
 import com.revature.main.model.Role;
 import com.revature.main.model.User;
 import com.revature.main.service.UserService;
@@ -57,7 +58,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void deleteUserById_positive(){
+    public void deleteUserById_positive() throws UserNotFoundException {
         when(userService.deleteUserById(1)).thenReturn(true);
         boolean actual = userController.deleteUserById(1);
         assertThat(actual).isEqualTo(true);
