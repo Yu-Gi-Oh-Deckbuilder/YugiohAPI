@@ -8,9 +8,12 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "wishlist")
+@Getter
+@Setter
 public class Wishlist extends Collection {
 
-    @ManyToMany
+    @OneToMany
     private List<User> sharedUsers;
+
 
 }

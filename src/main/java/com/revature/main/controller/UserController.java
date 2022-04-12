@@ -1,5 +1,6 @@
 package com.revature.main.controller;
 
+import com.revature.main.exceptions.UserNotFoundException;
 import com.revature.main.model.User;
 import com.revature.main.service.UserService;
 import lombok.Getter;
@@ -34,7 +35,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public boolean deleteUserById(@PathVariable("id") int id) {
+    public boolean deleteUserById(@PathVariable("id") int id) throws UserNotFoundException {
         boolean result = userService.deleteUserById(id);
         if (result == false){
             throw new InvalidParameterException("The User attempted to be deleted doesn't exist");
