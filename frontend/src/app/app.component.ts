@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
 import { LoginDialog } from './dialog/login.dialog';
 import { AuthService } from './shared/auth.service';
 
@@ -10,10 +11,16 @@ import { AuthService } from './shared/auth.service';
 })
 export class AppComponent {
   title = 'DeckBuilder';
+  isAuthenticated: Observable<boolean>;
+  errorMessage: Observable<string | null>;
+
   constructor(
     private auth: AuthService,
     private dialog: MatDialog
-    ){}
+    ){
+      this.isAuthenticated = auth.isAuthenticated();
+      this.errorMessage = auth.getErrorMessage();
+    }
 
   login() {
     const dialogRef = this.dialog.open(LoginDialog, {data: {username: "", password: ""}});
@@ -22,5 +29,9 @@ export class AppComponent {
         this.auth.login(data.username, data.password);
       }
     })
+  }
+
+  logout() {
+    //TODO
   }
 }
