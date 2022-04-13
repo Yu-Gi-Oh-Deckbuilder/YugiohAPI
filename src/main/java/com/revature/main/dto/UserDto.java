@@ -1,5 +1,6 @@
 package com.revature.main.dto;
 
+import com.revature.main.model.Role;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -19,4 +20,5 @@ public class UserDto {
 
     private String email;
 
+    private Role role;
 }
