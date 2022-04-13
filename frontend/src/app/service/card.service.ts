@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -5,5 +6,13 @@ import { Injectable } from '@angular/core';
 })
 export class CardService {
 
-  constructor() { }
+  private yugiohApiUrl = 'https://db.ygoprodeck.com/api/v7/cardinfo.php';
+
+  private cards:any = [];
+  
+  constructor(private http: HttpClient) { }
+
+  getAllCardsFromApi(){
+    
+  }
 }
