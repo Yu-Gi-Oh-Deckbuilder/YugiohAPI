@@ -26,8 +26,8 @@ public class UserService extends EntityService{
         return userRepository.findByUsername(username);
     }
 
-    public User getUserById(int id) {
-        return userRepository.getById(id);
+    public User getUserById(int id){
+        return userRepository.findById(id).get();
     }
 
     @Transactional
@@ -50,9 +50,9 @@ public class UserService extends EntityService{
         return user;
     }
 
+    //This is an admin endpoint
     @Transactional
     public User updateUser(User target) throws UserNotFoundException {
-        //This is an admin endpoint
         checkIfUserExists(target.getId());
         validateUserData(target);
 
@@ -87,6 +87,10 @@ public class UserService extends EntityService{
 
             if (!user.getUsername().matches("[a-zA-Z0-9]+")) {
                 throw new IllegalArgumentException("Username must only have alphabetical characters and/or '!_-. Username input was " + user.getUsername());
+            }
+
+            if(user.getFirstName().contains(" ") || user.getLastName().contains(" ")){
+                throw new IllegalArgumentException("First name and last and cannot be more than 1 string");
             }
 
             if (!user.getFirstName().matches("[a-zA-Z]+")) {

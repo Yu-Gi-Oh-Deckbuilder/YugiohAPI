@@ -96,7 +96,7 @@ public class UserServiceTest {
         User user = new User(2, "test", "password", "test", "test", "test@test.com", role);
         when(userRepository.getById(2)).thenReturn(user);
         when(userRepository.existsById(2)).thenReturn(true);
-        UserDto userDto = new UserDto(2, "test", "testlast", "new@email.com");
+        UserDto userDto = new UserDto(2, "test", "testlast", "new@email.com",role);
         User actual = userService.updateUser(userDto);
 
         assertThat(actual.getFirstName()).isEqualTo("test");
