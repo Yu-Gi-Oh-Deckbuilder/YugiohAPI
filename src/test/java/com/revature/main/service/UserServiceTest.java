@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
@@ -45,7 +46,7 @@ public class UserServiceTest {
     public void getUserByIdTest_positive() {
         Role role = new Role(1, "user");
         User expected = new User(1, "test", "password", "test", "test", "test@test.com", role);
-        when(userRepository.getById(1)).thenReturn(expected);
+        when(userRepository.findById(1)).thenReturn(Optional.of(expected));
         User actual = userService.getUserById(1);
         assertThat(actual).isEqualTo(expected);
     }
