@@ -22,6 +22,7 @@ import java.util.List;
 @Transactional
 public class WishlistService extends EntityService{
 
+
     @Autowired
     private WishlistRepository wishlistRepository;
 

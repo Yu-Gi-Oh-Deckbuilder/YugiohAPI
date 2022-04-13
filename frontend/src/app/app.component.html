@@ -1,7 +1,15 @@
 <mat-toolbar>
   <span class="spacer"></span>
-  <button mat-icon-button  (click)="login()">
-    <mat-icon>login</mat-icon>
-  </button>
+  <span *ngIf="!(isAuthenticated | async)">
+    <button mat-icon-button (click)="login()">
+      <mat-icon>login</mat-icon>
+    </button>
+  </span>
+  <span *ngIf="isAuthenticated | async">
+    <button mat-icon-button (click)="logout()">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </span>
 </mat-toolbar>
 <router-outlet></router-outlet>
+<p class="error center">{{errorMessage | async}}</p>

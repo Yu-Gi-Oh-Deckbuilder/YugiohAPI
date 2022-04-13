@@ -132,36 +132,4 @@ public class UserServiceTest {
         });
 
     }
-
-
-
-    //TODO need to work on negative test for the create user service (check why is now throwing the exception)
-
-
-
-
-//    @Test void createUser_negative_usernamealreadyexist(){
-//        User existentUser = new User(1, "test", "password", "test", "test", "test@test.com", "user");
-//        when(userRepository.save(existentUser)).thenReturn(existentUser);
-//
-//        User user = new User(1, "test", "password", "test", "test", "test@test.com", "user");
-//        when(userRepository.save(user)).thenReturn(user);
-//        User actual = userService.createUser(user);
-//
-//        List<User> userList = userService.getAllUsers();
-//        System.out.println("something to see my string " + userList);
-//
-//        assertThat(actual).isEqualTo(user);
-//    }
-//
-//    @Test void createUser_negative_userIsNull(){
-//
-//        User user = null;
-//
-//        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-//            userService.createUser(user);
-//        });
-//
-//        //IllegalArgumentException
-//    }
 }
