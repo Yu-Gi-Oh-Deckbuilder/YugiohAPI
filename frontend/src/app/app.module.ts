@@ -20,11 +20,13 @@ import { environment } from '../environments/environment';
 import { LoginDialog } from './dialog/login.dialog';
 import { AuthEffects } from './shared/state/auth.effects';
 import { reducers } from './app.state';
+import { HomepageComponent } from './homepage/homepage.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginDialog
+    LoginDialog,
+    HomepageComponent
   ],
   imports: [
     BrowserModule,
