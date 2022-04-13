@@ -15,8 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 public class UserService extends EntityService{
 
-    @Autowired
-    private UserRepository userRepository;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();

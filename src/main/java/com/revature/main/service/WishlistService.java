@@ -22,8 +22,6 @@ import java.util.List;
 @Transactional
 public class WishlistService extends EntityService{
 
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private WishlistRepository wishlistRepository;
