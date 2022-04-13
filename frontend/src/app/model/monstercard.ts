@@ -1,18 +1,16 @@
-import { Card } from "./card";
+import { SpellTrapCard } from "./spelltrapcard";
 
-export class MonsterCard extends Card{
+export class MonsterCard extends SpellTrapCard{
     private _atk:number;
     private _def:number;
     private _level:number;
-    private _race:string;
     private _attribute:string;
 
-    constructor(id:number,name:string,type:string,desc:string,atk:number, def:number, level:number, race:string, attribute:string){
-        super(id,name,type,desc);
+    constructor(id:number,name:string,type:string,desc:string,race:string,atk:number, def:number, level:number, attribute:string){
+        super(id,name,type,desc,race);
         this._atk = atk;
         this._def = def;
         this._level = level;
-        this._race = race;
         this._attribute = attribute;
     }
 
@@ -41,15 +39,6 @@ export class MonsterCard extends Card{
         this._level = level;
     }
 
-    get race():string {
-        return this._race;
-    }
-
-    set race(race:string){
-        this._race = race;
-    }
-
-    
     get attribute():string {
         return this._attribute;
     }
