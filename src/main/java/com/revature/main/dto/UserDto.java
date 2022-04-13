@@ -1,5 +1,6 @@
 package com.revature.main.dto;
 
+import com.revature.main.model.Role;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -11,9 +12,7 @@ import javax.persistence.Column;
 @Setter
 public class UserDto {
 
-    private String username;
-
-    private String password;
+    private int id;
 
     private String firstName;
 
@@ -21,4 +20,5 @@ public class UserDto {
 
     private String email;
 
+    private Role role;
 }
