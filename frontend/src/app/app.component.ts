@@ -47,22 +47,9 @@ export class AppComponent {
     this.cardService.getAllCardsFromApi()
     .subscribe((res) => {
       
-     /* cards.forEach((card)=>{
-        this.cards.set(card.id,card);
-      });
-      */
-      console.log(res.data[0]);
       res.data.forEach(card=>{
         this.cards.set(card.id,card);
       });
-
-      console.log(this.cards.get(68170903));
-      console.log(this.cards.get(34541863));
-      console.log(this.cards.get(40387124));
-      console.log(this.cards.get(86988864));
-      console.log(this.cards.get(83994646));
-      console.log(this.cards.get(30012506));
-      console.log(this.cards.get(65172015));
     });
     
   }

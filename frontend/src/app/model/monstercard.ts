@@ -14,7 +14,6 @@ export class MonsterCard extends SpellTrapCard{
         this._attribute = attribute;
     }
 
-    
     get atk():number {
         return this._atk;
     }
