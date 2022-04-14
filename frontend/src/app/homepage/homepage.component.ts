@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { SpellTrapCard } from '../model/spelltrapcard';
+import { CardService } from '../service/card.service';
 
 @Component({
   selector: 'app-homepage',
@@ -7,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomepageComponent implements OnInit {
 
-  constructor() { }
+  cards = new Map();
+
+  map = new Map();
+  constructor(private cardService:CardService) { }
 
   ngOnInit(): void {
   }
 
+ 
 }
