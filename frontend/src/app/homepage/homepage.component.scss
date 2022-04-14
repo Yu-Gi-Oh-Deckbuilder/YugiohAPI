@@ -1,0 +1,23 @@
+.container{
+    display: flex;
+    justify-content: space-evenly;
+    align-content:space-around;
+}
+
+.hero-container{
+    width: 30%;
+}
+
+.sign-up-container{
+}
+
+
+#site-descripton{
+    text-align:justify;
+    text-justify:newspaper;
+    font-size: large;
+}
+
+label, input {
+    display: block;
+}

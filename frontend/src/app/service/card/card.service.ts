@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiData } from '../model/apiData';
-import { SpellTrapCard } from '../model/spelltrapcard';
+import { ApiData } from '../../model/apiData';
+import { SpellTrapCard } from '../../model/spelltrapcard';
 
 @Injectable({
   providedIn: 'root'

@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { LoginDialog } from './dialog/login.dialog';
 import { SpellTrapCard } from './model/spelltrapcard';
-import { CardService } from './service/card.service';
+import { CardService } from './service/card/card.service';
 import { AuthService } from './shared/auth.service';
 
 @Component({
@@ -17,6 +17,7 @@ export class AppComponent {
   errorMessage: Observable<string | null>;
 
   cards: Map<number,SpellTrapCard> = new Map();
+  
   constructor(
     private auth: AuthService,
     private dialog: MatDialog, 
@@ -28,6 +29,8 @@ export class AppComponent {
 
     ngOnInit(): void {
       this.getCards();
+      console.log(this.cards.get(6983839));
+    console.log(this.cards.get(34541863));
     }
 
   login() {
@@ -51,6 +54,9 @@ export class AppComponent {
         this.cards.set(card.id,card);
       });
     });
+
+    
+
     
   }
 }

@@ -1,21 +1,38 @@
-import { Component, OnInit } from '@angular/core';
-import { SpellTrapCard } from '../model/spelltrapcard';
-import { CardService } from '../service/card.service';
+import { Component } from '@angular/core';
+import { FormBuilder,Validators } from '@angular/forms';
+import { UserService } from '../service/user/user.service';
 
 @Component({
   selector: 'app-homepage',
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.scss']
 })
-export class HomepageComponent implements OnInit {
+export class HomepageComponent {
+  
+  loginForm = this.formBuilder.group({
+    userName : ['',Validators.required],
+    firstName:['',Validators.required],
+    lastName:['',Validators.required],
+    email:['',Validators.required],
+    password : ['',Validators.required]
+  })
 
-  cards = new Map();
-
-  map = new Map();
-  constructor(private cardService:CardService) { }
+  constructor(private formBuilder: FormBuilder,private userService:UserService) { }
 
   ngOnInit(): void {
   }
 
- 
+  onSubmit(){
+    
+    console.warn(this.loginForm.value);
+    this.loginForm.value.role={
+      id:1,
+      name:"user"
+    } 
+    console.warn(this.loginForm.value);
+    this.userService.signup(this.loginForm.value)
+    .subscribe(res=>{
+      console.log(res);
+    })
+  }
 }
