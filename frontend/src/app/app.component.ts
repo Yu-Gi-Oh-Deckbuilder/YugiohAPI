@@ -29,8 +29,6 @@ export class AppComponent {
 
     ngOnInit(): void {
       this.getCards();
-      console.log(this.cards.get(6983839));
-    console.log(this.cards.get(34541863));
     }
 
   login() {
@@ -49,14 +47,10 @@ export class AppComponent {
   getCards(){
     this.cardService.getAllCardsFromApi()
     .subscribe((res) => {
-      
+      console.log(res.data);
       res.data.forEach(card=>{
         this.cards.set(card.id,card);
       });
-    });
-
-    
-
-    
+    });    
   }
 }
