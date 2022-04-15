@@ -6,6 +6,7 @@ import com.revature.main.exceptions.UserNotFoundException;
 import com.revature.main.model.*;
 import com.revature.main.service.DeckService;
 import com.revature.main.service.WishlistService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -209,4 +210,49 @@ public class CollectionControllerTest {
         ResponseEntity actual =  collectionsController.deleteInventoryById(1);
         assertThat((Boolean)actual.getBody()).isEqualTo(false);
     }*/
+
+    @Test
+    public void editWishlistById_positive() throws UserNotFoundException, CollectionDoesNotExistException {
+        when(wishListService.editWishlist(wishlist)).thenReturn(wishlist);
+
+        Wishlist editedWishlist = (Wishlist) collectionsController.editWishlistById(wishlist).getBody();
+
+        assertThat(editedWishlist).isEqualTo(wishlist);
+    }
+
+    @Test
+    public void editDeckById_positive() throws UserNotFoundException, CollectionDoesNotExistException {
+        when(deckService.editDeck(deck)).thenReturn(deck);
+
+        Deck editedDeck = (Deck) collectionsController.editDeck(deck).getBody();
+
+        assertThat(editedDeck).isEqualTo(deck);
+    }
+
+    /*@Test
+    public void editWishlistById_CollectionDoesNotExist() throws UserNotFoundException, CollectionDoesNotExistException {
+        //when(wishListService.editWishlist(wishlist)).thenReturn(null);
+
+        Assertions.assertThrows(CollectionDoesNotExistException.class,()->{
+            collectionsController.editWishlistById(wishlist);
+        });
+    }*/
+
+    @Test
+    public void createWishlist_positive() throws UserNotFoundException {
+        when(wishListService.createWishlist(wishlist)).thenReturn(wishlist);
+
+        Wishlist createdWishlist = (Wishlist) collectionsController.createWishlist(wishlist).getBody();
+
+        assertThat(createdWishlist).isEqualTo(wishlist);
+    }
+
+    @Test
+    public void createDeck_positive() throws UserNotFoundException {
+        when(deckService.createDeck(deck)).thenReturn(deck);
+
+        Deck createdDeck = (Deck) collectionsController.createDeck(deck).getBody();
+
+        assertThat(createdDeck).isEqualTo(deck);
+    }
 }
