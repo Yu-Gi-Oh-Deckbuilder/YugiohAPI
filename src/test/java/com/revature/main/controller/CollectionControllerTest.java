@@ -1,6 +1,8 @@
 package com.revature.main.controller;
 
+import com.revature.main.exceptions.UnAuthorizedException;
 import com.revature.main.exceptions.UserNotFoundException;
+import com.revature.main.exceptions.WishlistDoesNotExistException;
 import com.revature.main.model.*;
 import com.revature.main.service.UserService;
 import com.revature.main.service.WishlistService;
@@ -13,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import org.junit.jupiter.api.Assertions;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -108,4 +111,96 @@ public class CollectionControllerTest {
 
         assertThat(allWishlist).isEqualTo(collectionList);
     }
+
+
+    /*@Test void getAllDecksByUserId_positive(){
+        List<Deck> decks = new ArrayList<>();
+
+        decks.add(deck);
+        when(deckService.getAllDeckByUserId(1)).thenReturn(decks);
+        ResponseEntity responseEntity = collectionsController.getAllDeckByUserId(user.getId());
+
+        List<Deck> deckList = (List<Deck>) responseEntity.getBody();
+
+        assertThat(decks).isEqualTo(deckList);
+
+    }
+
+    @Test void getInventoryByUserId_positive(){
+        when(deckService.getAllInventoryByUserId(1)).thenReturn(inventory);
+        ResponseEntity responseEntity = collectionsController.getInventoryByUserId(user.getId());
+
+        Inventory target = (Inventory) responseEntity.getBody();
+
+        assertThat(inventory).isEqualTo(target);
+    }*/
+
+    @Test
+    public void getWishlistById_positive() throws UserNotFoundException, WishlistDoesNotExistException, UnAuthorizedException {
+        when(wishListService.getWishListById(1,1)).thenReturn(wishlist);
+
+        ResponseEntity responseEntity = collectionsController.getWishlistById(user.getId(),wishlist.getId());
+        Wishlist target = (Wishlist) responseEntity.getBody();
+
+        assertThat(wishlist).isEqualTo(target);
+    }
+
+   /* @Test
+    public void getDeckById_positive(){
+        when(deckService.getDeckById(1,1)).thenReturn(deck);
+
+        ResponseEntity responseEntity = collectionsController.getDeckById(user.getId(),deck.getId());
+        Deck target = (Deck) responseEntity.getBody();
+
+        assertThat(deck).isEqualTo(target);
+    }
+
+    @Test
+    public void getInventoryById_positive(){
+        when(inventoryService.getInventoryById(1,1)).thenReturn(inventory);
+
+        ResponseEntity responseEntity = collectionsController.getInventoryById(user.getId(),inventory.getId());
+        Inventory target = (Inventory) responseEntity.getBody();
+
+        assertThat(invenetory).isEqualTo(target);
+    }*/
+
+    @Test
+    public void deleteWishlistById_positive() throws UserNotFoundException {
+        when(wishListService.deleteWishlistById(1)).thenReturn(true);
+        ResponseEntity actual =  collectionsController.deleteWishlistById(1);
+        assertThat((Boolean)actual.getBody()).isEqualTo(true);
+    }
+
+    @Test
+    public void deleteWishlistById_negative(){
+        ResponseEntity actual =  collectionsController.deleteWishlistById(1);
+        assertThat((Boolean)actual.getBody()).isEqualTo(false);
+    }
+
+    /*@Test
+    public void deleteDeckById_positive() throws UserNotFoundException {
+        when(deckService.deleteWishlistById(1)).thenReturn(true);
+        ResponseEntity actual =  collectionsController.deleteDeckById(1);
+        assertThat((Boolean)actual.getBody()).isEqualTo(true);
+    }
+
+    @Test
+    public void deleteDeckById_negative(){
+        ResponseEntity actual =  collectionsController.deleteDeckById(1);
+        assertThat((Boolean)actual.getBody()).isEqualTo(false);
+    }
+
+    @Test
+    public void deleteInventoryById_positive() throws UserNotFoundException {
+        when(inventoryService.deleteWishlistById(1)).thenReturn(true);
+        ResponseEntity actual =  collectionsController.deleteInventoryById(1);
+        assertThat((Boolean)actual.getBody()).isEqualTo(true);
+    }
+
+    @Test
+    public void deleteInventoryById_negative(){
+        ResponseEntity actual =  collectionsController.deleteInventoryById(1);
+        assertThat((Boolean)actual.getBody()).isEqualTo(false);
+    }*/
 }
