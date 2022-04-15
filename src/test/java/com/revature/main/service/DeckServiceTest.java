@@ -172,14 +172,14 @@ public class DeckServiceTest {
     public void createDeck_positive() throws UserNotFoundException {
         when(deckRepository.save(deck)).thenReturn(deck);
         when(userRepository.existsById(deck.getOwner().getId())).thenReturn(true);
-        Deck actual = deckService.createWishlist(deck);
+        Deck actual = deckService.createDeck(deck);
         assertThat(actual).isEqualTo(deck);
     }
 
     @Test
     public void createDeck_UserNotFoundException(){
         Assertions.assertThrows(UserNotFoundException.class, ()->{
-            deckService.createWishlist(deck);
+            deckService.createDeck(deck);
         });
     }
 }

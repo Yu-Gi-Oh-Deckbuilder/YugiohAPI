@@ -70,7 +70,7 @@ public class DeckService extends EntityService{
     }
 
     @Transactional
-    public Deck createWishlist(Deck deck) throws UserNotFoundException {
+    public Deck createDeck(Deck deck) throws UserNotFoundException {
         checkIfUserExists(deck.getOwner().getId());
 
         deckRepository.save(deck);
