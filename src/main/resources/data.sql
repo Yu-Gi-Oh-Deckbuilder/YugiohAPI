@@ -11,8 +11,7 @@ values ('admin', 'admin', 'John', 'Doe', 'johndoe@email.com', 2),
 ('nikoloi1', 'password', 'Nikoloi', 'Ellis', 'nikoloi@email.com', 1);
 
 insert into deck (cards, owner_id)
-values ('¬í  sr  java.util.HashMap  ÚÁÃ `Ñ   F  loadFactorI  thresholdxp?@      w         sr  java.lang.Integer â ¤÷  8   I  valuexr  java.lang.Number ¬    à    xp    q ~  sq ~      q ~  x
-', 2),
+values ('59575539, 3, 46986414, 2, 61370518, 3, 83347294, 1', 2),
 ('59575539, 3, 46986414, 2, 61370518, 3, 83347294, 1', 3),
 ('59575539, 3, 46986414, 2, 61370518, 3, 83347294, 1', 4);
 
