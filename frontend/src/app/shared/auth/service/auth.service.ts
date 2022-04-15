@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from '../app.state';
-import { User } from './model/user.model';
+import { AppState } from '../../../app.state';
+import { User } from '../../model/user.model';
 import { AuthActions, AuthSelectors } from './state';
 import { environment } from 'src/environments/environment'
 import { Observable } from 'rxjs';

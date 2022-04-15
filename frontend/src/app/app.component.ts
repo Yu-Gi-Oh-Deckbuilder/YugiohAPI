@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { LoginDialog } from './dialog/login.dialog';
 import { SpellTrapCard } from './model/spelltrapcard';
 import { CardService } from './service/card/card.service';
-import { AuthService } from './shared/auth.service';
+import { AuthService } from './shared/auth/service/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -17,10 +17,10 @@ export class AppComponent {
   errorMessage: Observable<string | null>;
 
   cards: Map<number,SpellTrapCard> = new Map();
-  
+
   constructor(
     private auth: AuthService,
-    private dialog: MatDialog, 
+    private dialog: MatDialog,
     private cardService: CardService
     ){
       this.isAuthenticated = auth.isAuthenticated();
@@ -51,6 +51,6 @@ export class AppComponent {
       res.data.forEach(card=>{
         this.cards.set(card.id,card);
       });
-    });    
+    });
   }
 }

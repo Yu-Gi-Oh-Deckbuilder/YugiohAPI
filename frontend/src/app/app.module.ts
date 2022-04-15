@@ -18,7 +18,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { LoginDialog } from './dialog/login.dialog';
-import { AuthEffects } from './shared/state/auth.effects';
+import { AuthEffects } from './shared/auth/service/state/auth.effects';
 import { reducers } from './app.state';
 import { HomepageComponent } from './homepage/homepage.component';
 
