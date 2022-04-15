@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface DeckRepository extends JpaRepository<Deck, Integer> {
-//    @Query("SELECT r FROM Deck r JOIN r.user a WHERE a.id = ?1")
-//    public List<Deck> findAllByUserId(int userId);
+    @Query("SELECT r FROM Wishlist r JOIN r.owner a WHERE a.id = ?1")
+    public List<Deck> findAllByUserId(int userId);
 }

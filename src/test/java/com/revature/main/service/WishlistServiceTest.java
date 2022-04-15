@@ -5,11 +5,10 @@ import com.revature.main.dao.UserRepository;
 import com.revature.main.dao.WishlistRepository;
 import com.revature.main.exceptions.UnAuthorizedException;
 import com.revature.main.exceptions.UserNotFoundException;
-import com.revature.main.exceptions.WishlistDoesNotExistException;
+import com.revature.main.exceptions.CollectionDoesNotExistException;
 import com.revature.main.model.Role;
 import com.revature.main.model.User;
 import com.revature.main.model.Wishlist;
-import org.assertj.core.api.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -83,7 +82,7 @@ public class WishlistServiceTest {
     }
 
     @Test
-    public void getWishlistById_positive() throws UserNotFoundException, UnAuthorizedException, WishlistDoesNotExistException {
+    public void getWishlistById_positive() throws UserNotFoundException, UnAuthorizedException, CollectionDoesNotExistException {
         when(userRepository.getById(1)).thenReturn(user);
 
         when(wishlistRepository.getById(1)).thenReturn(wishlist);
@@ -95,7 +94,7 @@ public class WishlistServiceTest {
     }
 
     @Test
-    public void getWishlistById_SharedUser() throws UserNotFoundException, UnAuthorizedException, WishlistDoesNotExistException {
+    public void getWishlistById_SharedUser() throws UserNotFoundException, UnAuthorizedException, CollectionDoesNotExistException {
         when(userRepository.getById(2)).thenReturn(user2);
 
         when(wishlistRepository.getById(1)).thenReturn(wishlist);
@@ -133,13 +132,13 @@ public class WishlistServiceTest {
     public void getWishlistById_WishlistDoesNotExistException() {
        when(userRepository.getById(2)).thenReturn(user2);
        when(userRepository.existsById(2)).thenReturn(true);
-       Assertions.assertThrows(WishlistDoesNotExistException.class,()->{
+       Assertions.assertThrows(CollectionDoesNotExistException.class,()->{
           wishlistService.getWishListById(1,user2.getId());
        });
     }
 
     @Test
-    public void editWishlist_positive() throws UserNotFoundException, WishlistDoesNotExistException {
+    public void editWishlist_positive() throws UserNotFoundException, CollectionDoesNotExistException {
         when(wishlistRepository.getById(1)).thenReturn(wishlist);
         when(wishlistRepository.existsById(wishlist.getId())).thenReturn(true);
         when(userRepository.existsById(wishlist.getOwner().getId())).thenReturn(true);
@@ -155,7 +154,7 @@ public class WishlistServiceTest {
     }
 
     @Test public void editWishlist_WishlistNotFoundException(){
-        Assertions.assertThrows(WishlistDoesNotExistException.class,()->{
+        Assertions.assertThrows(CollectionDoesNotExistException.class,()->{
             wishlistService.editWishlist(wishlist);
         });
     }
