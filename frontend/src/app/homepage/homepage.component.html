@@ -1,19 +1,19 @@
 <div class="container">
     <div class="hero-container">
         <h1>Welcome to Yu-Gi-Oh Deck Builder</h1>
-        <p id="site-descripton">The Yu-Gi-Oh! trading card game is a Japanese collectible card game developed and published by Konami. 
-            Our web application will utilize YGOPRODECK's Yu-Gi-Oh! API to collect information about cards to help enthusiasts build their dream decks based on official rules and banned lists. 
+        <p id="site-descripton">The Yu-Gi-Oh! trading card game is a Japanese collectible card game developed and published by Konami.
+            Our web application will utilize YGOPRODECK's Yu-Gi-Oh! API to collect information about cards to help enthusiasts build their dream decks based on official rules and banned lists.
             The application will give users insight into their decks and help them see the cards and market prices.
             Users will be able to procedurally generate a deck, see how balanced their decks are, and explore a gallery of cards</p>
     </div>
     <div class="sign-up-container">
-        
+
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
             <fieldset>
                 <legend><h2>Sign-Up</h2></legend>
                 <div>
                     <label for="user-name">User Name: </label>
-                    <input id="user-name" type="text" formControlName="userName">
+                    <input id="user-name" type="text" formControlName="username">
                 </div>
                 <div>
                     <label for="first-name">First Name: </label>
@@ -26,10 +26,10 @@
                 <div>
                     <label for="email">Email: </label>
                     <input id="email" type="email" formControlName="email">
-                </div>  
+                </div>
                 <div>
                     <label for="password">Password </label>
-                    <input id="password" type="password" formControlName="password">   
+                    <input id="password" type="password" formControlName="password">
                 </div>
                 <button type="submit" [disabled]="!loginForm.valid">Submit</button>
             </fieldset>

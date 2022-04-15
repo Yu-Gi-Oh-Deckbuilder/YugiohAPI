@@ -8,9 +8,9 @@ import { UserService } from '../service/user/user.service';
   styleUrls: ['./homepage.component.scss']
 })
 export class HomepageComponent {
-  
+
   loginForm = this.formBuilder.group({
-    userName : ['',Validators.required],
+    username : ['',Validators.required],
     firstName:['',Validators.required],
     lastName:['',Validators.required],
     email:['',Validators.required],
@@ -23,12 +23,12 @@ export class HomepageComponent {
   }
 
   onSubmit(){
-    
+
     console.warn(this.loginForm.value);
-    this.loginForm.value.role={
+    this.loginForm.value.userRole={
       id:1,
       name:"user"
-    } 
+    }
     console.warn(this.loginForm.value);
     this.userService.signup(this.loginForm.value)
     .subscribe(res=>{
