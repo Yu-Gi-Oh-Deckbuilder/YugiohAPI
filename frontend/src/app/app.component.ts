@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { LoginDialog } from './dialog/login.dialog';
 import { CardService } from './shared/service/card/card.service';
 import { AuthService } from './shared/service/auth/auth.service';
-import { Card } from './shared/model/card.model';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +15,6 @@ export class AppComponent {
   isAuthenticated: Observable<boolean>;
   errorMessage: Observable<string | null>;
 
-  cards: Map<number,Card> = new Map();
 
   constructor(
     private auth: AuthService,
@@ -28,7 +26,7 @@ export class AppComponent {
     }
 
     ngOnInit(): void {
-      this.getCards();
+      this.cardService.loadCards();
     }
 
   login() {
@@ -44,13 +42,4 @@ export class AppComponent {
     //TODO
   }
 
-  getCards(){
-    this.cardService.getAllCardsFromApi()
-    .subscribe((res) => {
-      console.log(res.data);
-      res.data.forEach((card: Card)=>{
-        this.cards.set(card.id,card);
-      });
-    });
-  }
 }

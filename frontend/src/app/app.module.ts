@@ -18,9 +18,10 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { LoginDialog } from './dialog/login.dialog';
-import { AuthEffects } from './shared/service/auth/state/auth.effects';
+import { AuthEffects } from './shared/service/auth/state/';
 import { reducers } from './app.state';
 import { HomepageComponent } from './homepage/homepage.component';
+import { CardEffects } from './shared/service/card/state';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,10 @@ import { HomepageComponent } from './homepage/homepage.component';
     MatDialogModule,
     MatInputModule,
     StoreModule.forRoot(reducers, {}),
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([
+      AuthEffects.AuthEffects,
+      CardEffects.CardEffects,
+    ]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
   ],
   providers: [],
