@@ -1,19 +1,15 @@
 package com.revature.main.service;
 
-import com.revature.main.dao.UserRepository;
 import com.revature.main.dao.WishlistRepository;
 import com.revature.main.exceptions.UnAuthorizedException;
 import com.revature.main.exceptions.UserNotFoundException;
-import com.revature.main.exceptions.WishlistDoesNotExistException;
+import com.revature.main.exceptions.CollectionDoesNotExistException;
 import com.revature.main.model.User;
 import com.revature.main.model.Wishlist;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -34,13 +30,13 @@ public class WishlistService extends EntityService{
         return wishlists;
     }
 
-    public Wishlist getWishListById(int id, int userId) throws UserNotFoundException, UnAuthorizedException, WishlistDoesNotExistException {
+    public Wishlist getWishListById(int id, int userId) throws UserNotFoundException, UnAuthorizedException, CollectionDoesNotExistException {
         User user = userRepository.getById(userId);
 
         checkIfUserExists(userId);
 
         if(!wishlistRepository.existsById(id)){
-            throw new WishlistDoesNotExistException("Wishlist does not exist");
+            throw new CollectionDoesNotExistException("Wishlist does not exist");
         }
 
         Wishlist wishlist = wishlistRepository.getById(id);
@@ -54,9 +50,9 @@ public class WishlistService extends EntityService{
     }
 
     @Transactional
-    public Wishlist editWishlist(Wishlist target) throws UserNotFoundException, WishlistDoesNotExistException {
+    public Wishlist editWishlist(Wishlist target) throws UserNotFoundException, CollectionDoesNotExistException {
         if(!wishlistRepository.existsById(target.getId())){
-            throw new WishlistDoesNotExistException("Wishlist with id "+target.getId()+" does not exist");
+            throw new CollectionDoesNotExistException("Wishlist with id "+target.getId()+" does not exist");
         }
 
         if(!userRepository.existsById(target.getOwner().getId())){
