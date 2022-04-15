@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { LoginDialog } from './dialog/login.dialog';
 import { SpellTrapCard } from './model/spelltrapcard';
 import { CardService } from './service/card/card.service';
-import { AuthService } from './shared/auth/service/auth.service';
+import { AuthService } from './shared/service/auth/auth.service';
 
 @Component({
   selector: 'app-root',
