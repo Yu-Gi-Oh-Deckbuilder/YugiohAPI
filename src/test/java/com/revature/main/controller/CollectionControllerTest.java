@@ -2,6 +2,7 @@ package com.revature.main.controller;
 
 import com.revature.main.exceptions.UserNotFoundException;
 import com.revature.main.model.*;
+import com.revature.main.service.UserService;
 import com.revature.main.service.WishlistService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
+import org.junit.jupiter.api.Assertions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,5 +86,26 @@ public class CollectionControllerTest {
         List<Collection> collectionList = (List<Collection>) responseEntity.getBody();
 
         assertThat(allCollections).isEqualTo(collectionList);
+    }
+/*
+    @Test
+    public void getAllCollectionsByUserId_UserNotFoundException(){
+        Assertions.assertThrows(UserNotFoundException.class, ()->{
+            collectionsController.getAllWishlistsByUserId(user.getId());
+        });
+    }*/
+
+    @Test
+    public void getAllWishlistsByUserId_positive() throws UserNotFoundException {
+        List<Wishlist> allWishlist = new ArrayList<>();
+
+        allWishlist.add(wishlist);
+
+        when(wishListService.getAllWishlistByUserId(1)).thenReturn((allWishlist));
+        ResponseEntity responseEntity = collectionsController.getAllWishlistsByUserId(user.getId());
+
+        List<Wishlist> collectionList = (List<Wishlist>) responseEntity.getBody();
+
+        assertThat(allWishlist).isEqualTo(collectionList);
     }
 }

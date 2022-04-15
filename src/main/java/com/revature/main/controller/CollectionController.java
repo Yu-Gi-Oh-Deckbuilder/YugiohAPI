@@ -61,4 +61,15 @@ public class CollectionController {
 
     }
 
+    @GetMapping("/wishlists")
+    public ResponseEntity<?> getAllWishlistsByUserId(@RequestParam("id") int id) {
+        try{
+            List<Wishlist> wishLists = wishlistService.getAllWishlistByUserId(id);
+            return  ResponseEntity.ok().body(wishLists);
+        }catch(UserNotFoundException e){
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+
 }
