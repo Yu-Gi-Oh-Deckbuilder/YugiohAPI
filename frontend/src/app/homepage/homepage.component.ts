@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder,Validators } from '@angular/forms';
-import { UserService } from '../service/user/user.service';
+import { UserService } from '../shared/service/user/user.service';
 
 @Component({
   selector: 'app-homepage',

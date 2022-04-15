@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { LoginDialog } from './dialog/login.dialog';
-import { SpellTrapCard } from './model/spelltrapcard';
-import { CardService } from './service/card/card.service';
+import { CardService } from './shared/service/card/card.service';
 import { AuthService } from './shared/service/auth/auth.service';
+import { Card } from './shared/model/card.model';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +16,7 @@ export class AppComponent {
   isAuthenticated: Observable<boolean>;
   errorMessage: Observable<string | null>;
 
-  cards: Map<number,SpellTrapCard> = new Map();
+  cards: Map<number,Card> = new Map();
 
   constructor(
     private auth: AuthService,
@@ -48,7 +48,7 @@ export class AppComponent {
     this.cardService.getAllCardsFromApi()
     .subscribe((res) => {
       console.log(res.data);
-      res.data.forEach(card=>{
+      res.data.forEach((card: Card)=>{
         this.cards.set(card.id,card);
       });
     });

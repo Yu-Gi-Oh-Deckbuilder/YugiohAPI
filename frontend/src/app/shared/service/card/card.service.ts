@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiData } from '../../model/apiData';
+import { ApiData } from '../../model/api-data.model';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,7 @@ import { ApiData } from '../../model/apiData';
 export class CardService {
 
   private yugiohApiUrl = 'https://db.ygoprodeck.com/api/v7/cardinfo.php';
-  
+
   constructor(private http: HttpClient) { }
 
   getAllCardsFromApi():Observable<ApiData>{
