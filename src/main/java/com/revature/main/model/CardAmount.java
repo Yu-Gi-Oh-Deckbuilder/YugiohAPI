@@ -7,31 +7,33 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "ban_list")
+@Table(name="card_amount")
 @NoArgsConstructor
-@ToString
 @AllArgsConstructor
 @Getter
 @Setter
-public class BanList {
-
+@ToString
+public class CardAmount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int Id;
 
     @Column
-    private String banList;
+    private int cardId;
+
+    @Column
+    private int cardAmount;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BanList banList1 = (BanList) o;
-        return id == banList1.id && Objects.equals(banList, banList1.banList);
+        CardAmount that = (CardAmount) o;
+        return Id == that.Id && cardId == that.cardId && cardAmount == that.cardAmount;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, banList);
+        return Objects.hash(Id, cardId, cardAmount);
     }
 }

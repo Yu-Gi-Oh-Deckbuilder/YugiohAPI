@@ -12,7 +12,7 @@ import java.util.Objects;
 @Setter
 public class Wishlist extends Collection {
 
-    @OneToMany
+    @ManyToMany
     private List<User> sharedUsers;
 
 

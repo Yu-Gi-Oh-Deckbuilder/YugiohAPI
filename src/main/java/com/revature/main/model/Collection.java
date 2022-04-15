@@ -1,9 +1,12 @@
 package com.revature.main.model;
 
+import com.revature.main.dao.CardAmountRepository;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -12,15 +15,13 @@ import java.util.Map;
 @MappedSuperclass
 @Data
 public class Collection {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column
-    private HashMap<Integer, Integer> cards;
+    @ManyToMany
+    private List<CardAmount> cards;
 
     @ManyToOne
     private User owner;
-
 }

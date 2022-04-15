@@ -3,10 +3,8 @@ package com.revature.main.controller;
 import com.revature.main.exceptions.CollectionDoesNotExistException;
 import com.revature.main.exceptions.UnAuthorizedException;
 import com.revature.main.exceptions.UserNotFoundException;
-import com.revature.main.model.Collection;
-import com.revature.main.model.Deck;
-import com.revature.main.model.Inventory;
-import com.revature.main.model.Wishlist;
+import com.revature.main.model.*;
+import com.revature.main.service.CardAmountService;
 import com.revature.main.service.DeckService;
 import com.revature.main.service.WishlistService;
 import lombok.Getter;
@@ -32,6 +30,9 @@ public class CollectionController {
     @Autowired
     @Getter
     DeckService deckService;
+
+    @Autowired
+    CardAmountService cardAmountService;
 /*
     @Autowired
     @Getter
@@ -63,20 +64,20 @@ public class CollectionController {
         }
     }
 
-    @GetMapping("/wishlists")
-    public ResponseEntity<?> getAllWishlistsByUserId(@RequestParam("id") int id) {
+    @GetMapping("/users/{userId}/wishlists")
+    public ResponseEntity<?> getAllWishlistsByUserId(@PathVariable("userId") int userId) {
         try{
-            List<Wishlist> wishLists = wishlistService.getAllWishlistByUserId(id);
+            List<Wishlist> wishLists = wishlistService.getAllWishlistByUserId(userId);
             return  ResponseEntity.ok().body(wishLists);
         }catch(UserNotFoundException e){
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
-    @GetMapping("/decks")
-    public ResponseEntity<?> getAllDecksByUserId(@RequestParam("id") int id) {
+    @GetMapping("/users/{userId}/decks")
+    public ResponseEntity<?> getAllDecksByUserId(@PathParam("userId") int userId) {
         try{
-            List<Deck> decks = deckService.getAllDecksByUserId(id);
+            List<Deck> decks = deckService.getAllDecksByUserId(userId);
             return  ResponseEntity.ok().body(decks);
         }catch(UserNotFoundException | CollectionDoesNotExistException | UnAuthorizedException e){
             return ResponseEntity.status(400).body(e.getMessage());
@@ -94,8 +95,8 @@ public class CollectionController {
         }
     }*/
 
-    @GetMapping("/wishlists/{wishlistId}")
-    public ResponseEntity<?> getWishlistById(@RequestParam("id") int userId, @PathParam("wishlistId") int wishlistId) throws UnAuthorizedException {
+    @GetMapping("users/{userId}/wishlists/{wishlistId}")
+    public ResponseEntity<?> getWishlistById(@PathParam("userId") int userId, @PathParam("wishlistId") int wishlistId) throws UnAuthorizedException {
         try{
             Wishlist wishList = wishlistService.getWishListById(wishlistId,userId);
             return  ResponseEntity.ok().body(wishList);
@@ -106,8 +107,8 @@ public class CollectionController {
         }
     }
 
-    @GetMapping("/decks/{deckId}")
-    public ResponseEntity<?> getDeckById(@RequestParam("id") int userId,@PathParam("deckId")int deckId) {
+    @GetMapping("/users/{userId}/decks/{deckId}")
+    public ResponseEntity<?> getDeckById(@PathParam("userId") int userId,@PathParam("deckId")int deckId) {
         try{
             Deck deck = deckService.getDeckById(deckId,userId);
             return  ResponseEntity.ok().body(deck);
@@ -132,8 +133,10 @@ public class CollectionController {
     }*/
 
     @PostMapping("/wishlists")
-    public ResponseEntity<?> createWishlist(Wishlist wishlist){
+    public ResponseEntity<?> createWishlist(@RequestBody Wishlist wishlist){
         try{
+            List<CardAmount> cardAmount = cardAmountService.createCardAmount(wishlist.getCards());
+            wishlist.setCards(cardAmount);
             Wishlist createWishlist = wishlistService.createWishlist(wishlist);
             return ResponseEntity.ok().body(createWishlist);
         } catch (UserNotFoundException e) {
@@ -142,7 +145,7 @@ public class CollectionController {
     }
 
    @PostMapping("/decks")
-    public ResponseEntity<?> createDeck(Deck deck){
+    public ResponseEntity<?> createDeck(@RequestBody Deck deck){
         try{
             Deck createDeck = deckService.createDeck(deck);
             return ResponseEntity.ok().body(createDeck);

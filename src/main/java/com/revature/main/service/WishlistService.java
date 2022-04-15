@@ -62,7 +62,9 @@ public class WishlistService extends EntityService{
         Wishlist source = wishlistRepository.getById(target.getId());
         source.setSharedUsers(target.getSharedUsers());
         source.setCards(target.getCards());
-        return source;
+
+        //flushing will save the object to the database
+        return wishlistRepository.saveAndFlush(source);
     }
 
     @Transactional
