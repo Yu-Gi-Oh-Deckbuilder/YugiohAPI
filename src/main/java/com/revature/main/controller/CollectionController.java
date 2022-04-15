@@ -1,5 +1,6 @@
 package com.revature.main.controller;
 
+import com.revature.main.exceptions.CardAmountDoesNotExistException;
 import com.revature.main.exceptions.CollectionDoesNotExistException;
 import com.revature.main.exceptions.UnAuthorizedException;
 import com.revature.main.exceptions.UserNotFoundException;
@@ -147,6 +148,8 @@ public class CollectionController {
    @PostMapping("/decks")
     public ResponseEntity<?> createDeck(@RequestBody Deck deck){
         try{
+            List<CardAmount> cardAmount = cardAmountService.createCardAmount(deck.getCards());
+            deck.setCards(cardAmount);
             Deck createDeck = deckService.createDeck(deck);
             return ResponseEntity.ok().body(createDeck);
         } catch (UserNotFoundException e) {
@@ -191,13 +194,11 @@ public class CollectionController {
             }
         }*/
     @PutMapping("/wishlists")
-    public ResponseEntity<?> editWishlistById(@RequestBody Wishlist wishlist){
+    public ResponseEntity<?> editWishlistById(@RequestBody Wishlist wishlist) throws CardAmountDoesNotExistException {
         try{
             Wishlist editedWishlist = wishlistService.editWishlist(wishlist);
             return ResponseEntity.ok().body(editedWishlist);
-        }catch(UserNotFoundException e){
-            return ResponseEntity.status(400).body(e.getMessage());
-        }catch(CollectionDoesNotExistException e){
+        }catch(UserNotFoundException | CollectionDoesNotExistException e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
@@ -207,9 +208,7 @@ public class CollectionController {
         try{
             Deck editedDeck = deckService.editDeck(deck);
             return ResponseEntity.ok().body(editedDeck);
-        }catch(UserNotFoundException e){
-            return ResponseEntity.status(400).body(e.getMessage());
-        }catch(CollectionDoesNotExistException e){
+        }catch(UserNotFoundException | CollectionDoesNotExistException e){
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }

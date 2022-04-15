@@ -19,7 +19,7 @@ public class Collection {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<CardAmount> cards;
 
     @ManyToOne

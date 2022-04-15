@@ -1,9 +1,11 @@
 package com.revature.main.controller;
 
+import com.revature.main.exceptions.CardAmountDoesNotExistException;
 import com.revature.main.exceptions.CollectionDoesNotExistException;
 import com.revature.main.exceptions.UnAuthorizedException;
 import com.revature.main.exceptions.UserNotFoundException;
 import com.revature.main.model.*;
+import com.revature.main.service.CardAmountService;
 import com.revature.main.service.DeckService;
 import com.revature.main.service.WishlistService;
 import org.junit.jupiter.api.Assertions;
@@ -30,7 +32,7 @@ public class CollectionControllerTest {
     private static Wishlist wishlist;
     private static Inventory inventory;
     private static Deck deck;
-    private static HashMap<Integer,Integer> cards;
+    private static List<CardAmount> cards;
     private static BanList banList;
 
     @Mock
@@ -38,6 +40,9 @@ public class CollectionControllerTest {
 
     @Mock
     WishlistService wishListService;
+
+    @Mock
+    CardAmountService cardAmountService;
 
    // @Mock
    // InventoryService inventoryServiceService;
@@ -54,11 +59,10 @@ public class CollectionControllerTest {
         deck = new Deck();
         inventory = new Inventory();
         banList = new BanList();
-        cards = new HashMap<>();
+        cards = new ArrayList<>();
 
 
-        cards.put(1,1);
-        cards.put(2,2);
+        cards.add(new CardAmount());
 
         wishlist.setId(1);
         wishlist.setOwner(user);
@@ -212,7 +216,7 @@ public class CollectionControllerTest {
     }*/
 
     @Test
-    public void editWishlistById_positive() throws UserNotFoundException, CollectionDoesNotExistException {
+    public void editWishlistById_positive() throws UserNotFoundException, CollectionDoesNotExistException, CardAmountDoesNotExistException {
         when(wishListService.editWishlist(wishlist)).thenReturn(wishlist);
 
         Wishlist editedWishlist = (Wishlist) collectionsController.editWishlistById(wishlist).getBody();
@@ -241,6 +245,7 @@ public class CollectionControllerTest {
     @Test
     public void createWishlist_positive() throws UserNotFoundException {
         when(wishListService.createWishlist(wishlist)).thenReturn(wishlist);
+        when(cardAmountService.createCardAmount(cards)).thenReturn(cards);
 
         Wishlist createdWishlist = (Wishlist) collectionsController.createWishlist(wishlist).getBody();
 

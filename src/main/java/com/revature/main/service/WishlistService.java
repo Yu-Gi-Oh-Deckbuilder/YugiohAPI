@@ -1,9 +1,11 @@
 package com.revature.main.service;
 
+import com.revature.main.dao.CardAmountRepository;
 import com.revature.main.dao.WishlistRepository;
 import com.revature.main.exceptions.UnAuthorizedException;
 import com.revature.main.exceptions.UserNotFoundException;
 import com.revature.main.exceptions.CollectionDoesNotExistException;
+import com.revature.main.model.CardAmount;
 import com.revature.main.model.User;
 import com.revature.main.model.Wishlist;
 import lombok.NoArgsConstructor;
@@ -60,11 +62,13 @@ public class WishlistService extends EntityService{
         }
 
         Wishlist source = wishlistRepository.getById(target.getId());
+        source.setName(target.getName());
         source.setSharedUsers(target.getSharedUsers());
         source.setCards(target.getCards());
 
         //flushing will save the object to the database
-        return wishlistRepository.saveAndFlush(source);
+        Wishlist wishlist = wishlistRepository.saveAndFlush(source);
+        return wishlist;
     }
 
     @Transactional

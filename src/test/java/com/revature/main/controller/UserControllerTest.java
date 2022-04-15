@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.extractProperty;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -81,8 +80,6 @@ public class UserControllerTest {
         when(userService.deleteUserById(1)).thenReturn(true);
         boolean actual = userController.deleteUserById(1);
         assertThat(actual).isEqualTo(true);
-
-
     }
 
     @Test

@@ -12,8 +12,9 @@ import java.util.Objects;
 @Setter
 public class Wishlist extends Collection {
 
+    @Column
+    private String name;
+
     @ManyToMany
     private List<User> sharedUsers;
-
-
 }

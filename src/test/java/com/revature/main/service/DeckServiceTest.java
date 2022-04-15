@@ -38,7 +38,7 @@ public class DeckServiceTest {
     private static  Role role;
     private static Deck deck;
     private static Deck deck2;
-    private static HashMap<Integer,Integer> cards;
+    private static List<CardAmount> cards;
     private static BanList banList;
 
     @BeforeAll
@@ -49,9 +49,8 @@ public class DeckServiceTest {
         deck = new Deck();
         deck2 = new Deck();
 
-        cards = new HashMap<>();
-        cards.put(1,1);
-        cards.put(2,2);
+        cards = new ArrayList<>();
+        cards.add(new CardAmount());
 
         banList = new BanList(1, "TCG");
 

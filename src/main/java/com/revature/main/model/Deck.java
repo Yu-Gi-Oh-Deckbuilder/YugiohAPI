@@ -12,6 +12,9 @@ import java.util.Objects;
 @Setter
 public class Deck extends Collection{
 
+    @Column
+    private String name;
+
     @ManyToOne
     private BanList banList;
 
