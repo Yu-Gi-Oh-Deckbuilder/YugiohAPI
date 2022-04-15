@@ -1,12 +1,13 @@
 package com.revature.main.controller;
 
+import com.revature.main.exceptions.CollectionDoesNotExistException;
 import com.revature.main.exceptions.UnAuthorizedException;
 import com.revature.main.exceptions.UserNotFoundException;
-import com.revature.main.exceptions.WishlistDoesNotExistException;
 import com.revature.main.model.Collection;
 import com.revature.main.model.Deck;
 import com.revature.main.model.Inventory;
 import com.revature.main.model.Wishlist;
+import com.revature.main.service.DeckService;
 import com.revature.main.service.WishlistService;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +29,10 @@ public class CollectionController {
     @Getter
     WishlistService wishlistService;
 
-    /*@Autowired
+    @Autowired
     @Getter
     DeckService deckService;
-
+/*
     @Autowired
     @Getter
     InventoryService inventoryService;*/
@@ -72,15 +73,15 @@ public class CollectionController {
         }
     }
 
-    /*@GetMapping("/decks")
+    @GetMapping("/decks")
     public ResponseEntity<?> getAllDecksByUserId(@RequestParam("id") int id) {
         try{
             List<Deck> decks = deckService.getAllDecksByUserId(id);
             return  ResponseEntity.ok().body(decks);
-        }catch(UserNotFoundException e){
+        }catch(UserNotFoundException | CollectionDoesNotExistException | UnAuthorizedException e){
             return ResponseEntity.status(400).body(e.getMessage());
         }
-    }*/
+    }
 
     /*
     @GetMapping("/inventory")
@@ -100,22 +101,22 @@ public class CollectionController {
             return  ResponseEntity.ok().body(wishList);
         }catch(UserNotFoundException e){
             return ResponseEntity.status(400).body(e.getMessage());
-        }catch (WishlistDoesNotExistException e){
+        }catch (CollectionDoesNotExistException e){
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
-    /*@GetMapping("/decks/{deckId}")
+    @GetMapping("/decks/{deckId}")
     public ResponseEntity<?> getDeckById(@RequestParam("id") int userId,@PathParam("deckId")int deckId) {
         try{
-            List<Deck> decks = deckService.getDecksById(deckId,userId);
-            return  ResponseEntity.ok().body(decks);
+            Deck deck = deckService.getDeckById(deckId,userId);
+            return  ResponseEntity.ok().body(deck);
         }catch(UserNotFoundException e){
             return ResponseEntity.status(400).body(e.getMessage());
-        }catch (DeckDoesNotExistException e){
+        }catch (CollectionDoesNotExistException e){
             return ResponseEntity.status(400).body(e.getMessage());
         }
-    }*/
+    }
 
 
     /*@GetMapping("/inventory/{inventoryId}")
@@ -140,16 +141,16 @@ public class CollectionController {
         }
     }
 
-    /*@PostMapping("/decks")
+   @PostMapping("/decks")
     public ResponseEntity<?> createDeck(Deck deck){
         try{
-            Deck createDeck = deckService.createWishlist(deck);
+            Deck createDeck = deckService.createDeck(deck);
             return ResponseEntity.ok().body(createDeck);
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
-
+ /*
     @PostMapping("/wishlists")
     public ResponseEntity<?> createInventory(Inventory inventory){
         try{
@@ -169,7 +170,7 @@ public class CollectionController {
         }
     }
 
-    /*@DeleteMapping("/decks/{deckId}")
+    @DeleteMapping("/decks/{deckId}")
     public ResponseEntity<?> deleteDeck(@RequestParam("deckId") int deckId){
         if (deckService.deleteDeckById(deckId)) {
             return ResponseEntity.ok().body(true);
@@ -177,15 +178,15 @@ public class CollectionController {
             return ResponseEntity.status(400).body(false);
         }
     }
-
-    @DeleteMapping("/inventory/{inventoryId}")
-    public ResponseEntity<?> deleteInventory(@RequestParam("inventoryId") int inventoryId){
-        if (inventoryService.deleteDeckById(inventoryId)) {
-            return ResponseEntity.ok().body(true);
-        } else {
-            return ResponseEntity.status(400).body(false);
-        }
-    }*/
+    /*
+        @DeleteMapping("/inventory/{inventoryId}")
+        public ResponseEntity<?> deleteInventory(@RequestParam("inventoryId") int inventoryId){
+            if (inventoryService.deleteDeckById(inventoryId)) {
+                return ResponseEntity.ok().body(true);
+            } else {
+                return ResponseEntity.status(400).body(false);
+            }
+        }*/
     @PutMapping("/wishlists")
     public ResponseEntity<?> editWishlistById(@RequestBody Wishlist wishlist){
         try{
@@ -193,23 +194,23 @@ public class CollectionController {
             return ResponseEntity.ok().body(editedWishlist);
         }catch(UserNotFoundException e){
             return ResponseEntity.status(400).body(e.getMessage());
-        }catch(WishlistDoesNotExistException e){
+        }catch(CollectionDoesNotExistException e){
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
-    /*@PatchMapping("/decks")
+   @PatchMapping("/decks")
     public ResponseEntity<?> editDeck(Deck deck){
         try{
             Deck editedDeck = deckService.editDeck(deck);
             return ResponseEntity.ok().body(editedDeck);
         }catch(UserNotFoundException e){
             return ResponseEntity.status(400).body(e.getMessage());
-        }catch(DeckDoesNotExistException e){
+        }catch(CollectionDoesNotExistException e){
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
-
+ /*
     @PatchMapping("/inventory")
     public ResponseEntity<?> editInventory(Inventory inventory){
         try{
