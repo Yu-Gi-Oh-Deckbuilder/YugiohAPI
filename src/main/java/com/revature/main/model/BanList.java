@@ -20,18 +20,18 @@ public class BanList {
     private int id;
 
     @Column
-    private String banList;
+    private String type;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BanList banList1 = (BanList) o;
-        return id == banList1.id && Objects.equals(banList, banList1.banList);
+        BanList type1 = (BanList) o;
+        return id == type1.id && Objects.equals(type, type1.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, banList);
+        return Objects.hash(id, type);
     }
 }

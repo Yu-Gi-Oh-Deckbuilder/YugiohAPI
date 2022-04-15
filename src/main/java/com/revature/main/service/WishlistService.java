@@ -24,6 +24,9 @@ public class WishlistService extends EntityService{
     @Autowired
     private WishlistRepository wishlistRepository;
 
+    public List<Wishlist> getAllWishlists(){
+        return wishlistRepository.findAll();
+    }
     public List<Wishlist> getAllWishlistByUserId(int id) throws UserNotFoundException {
        checkIfUserExists(id);
 

@@ -5,6 +5,7 @@ import com.revature.main.exceptions.CollectionDoesNotExistException;
 import com.revature.main.exceptions.UnAuthorizedException;
 import com.revature.main.exceptions.UserNotFoundException;
 import com.revature.main.model.*;
+import com.revature.main.service.BanListService;
 import com.revature.main.service.CardAmountService;
 import com.revature.main.service.DeckService;
 import com.revature.main.service.WishlistService;
@@ -44,6 +45,9 @@ public class CollectionControllerTest {
     @Mock
     CardAmountService cardAmountService;
 
+    @Mock
+    BanListService banListService;
+
    // @Mock
    // InventoryService inventoryServiceService;
 
@@ -71,7 +75,7 @@ public class CollectionControllerTest {
         wishlist.getSharedUsers().add(user);
 
         banList.setId(1);
-        banList.setBanList("TCG");
+        banList.setType("TCG");
         deck.setId(1);
         deck.setOwner(user);
         deck.setCards(cards);
@@ -255,7 +259,7 @@ public class CollectionControllerTest {
     @Test
     public void createDeck_positive() throws UserNotFoundException {
         when(deckService.createDeck(deck)).thenReturn(deck);
-
+        when(banListService.findBanList(deck.getBanList().getType())).thenReturn(banList);
         Deck createdDeck = (Deck) collectionsController.createDeck(deck).getBody();
 
         assertThat(createdDeck).isEqualTo(deck);

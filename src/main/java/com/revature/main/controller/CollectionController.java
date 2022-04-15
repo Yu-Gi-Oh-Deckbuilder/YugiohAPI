@@ -5,6 +5,7 @@ import com.revature.main.exceptions.CollectionDoesNotExistException;
 import com.revature.main.exceptions.UnAuthorizedException;
 import com.revature.main.exceptions.UserNotFoundException;
 import com.revature.main.model.*;
+import com.revature.main.service.BanListService;
 import com.revature.main.service.CardAmountService;
 import com.revature.main.service.DeckService;
 import com.revature.main.service.WishlistService;
@@ -25,45 +26,64 @@ import java.util.List;
 public class CollectionController {
 
     @Autowired
-    @Getter
     WishlistService wishlistService;
 
     @Autowired
-    @Getter
     DeckService deckService;
 
     @Autowired
     CardAmountService cardAmountService;
+
+    @Autowired
+    BanListService banListService;
 /*
     @Autowired
-    @Getter
     InventoryService inventoryService;*/
 
-    @GetMapping
-    public ResponseEntity<?> getAllCollectionsByUserId(@RequestParam("id") int id) {
+    /*@GetMapping
+    public ResponseEntity<?> getAllWishlists(@RequestParam("id") int id) {
         try{
             List<Wishlist> wishLists = wishlistService.getAllWishlistByUserId(id);
             //List<Deck> deckList = deckService.getAllDecksByUserId(id);
             //Inventory inventory = inventoryService.getInventoryByUserId(id);
 
-            List<Collection> collectionList = new ArrayList<>();
+            //List<Wishlist> collectionList = new ArrayList<>();
 
-            for (Wishlist wishlist: wishLists) {
-                collectionList.add(wishlist);
-            }
 
-            /*for (Deck deck: deckList) {
+
+            *//*for (Deck deck: deckList) {
                 collectionList.add(deck);
             }
 
-            collectionList.add(inventory);*/
+            collectionList.add(inventory);*//*
 
-            return  ResponseEntity.ok().body(collectionList);
+            return  ResponseEntity.ok().body(wishLists);
 
         }catch(UserNotFoundException e){
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
+*/
+
+    @GetMapping("/wishlists")
+    public ResponseEntity<?> getAllWishlists() {
+        List<Wishlist> wishLists = wishlistService.getAllWishlists();
+        return  ResponseEntity.ok().body(wishLists);
+    }
+
+    @GetMapping("/decks")
+    public ResponseEntity<?> getAllDecks() {
+        List<Deck> decks = deckService.getAllDecks();
+        return  ResponseEntity.ok().body(decks);
+    }
+
+    /*@GetMapping("/inventories")
+    public ResponseEntity<?> getAllWishlists() {
+        try{
+            List<Inventory> inventories = inventory.getAllinventory();
+            return  ResponseEntity.ok().body(inventories);
+        }
+    }*/
 
     @GetMapping("/users/{userId}/wishlists")
     public ResponseEntity<?> getAllWishlistsByUserId(@PathVariable("userId") int userId) {
@@ -76,7 +96,7 @@ public class CollectionController {
     }
 
     @GetMapping("/users/{userId}/decks")
-    public ResponseEntity<?> getAllDecksByUserId(@PathParam("userId") int userId) {
+    public ResponseEntity<?> getAllDecksByUserId(@PathVariable("userId") int userId) {
         try{
             List<Deck> decks = deckService.getAllDecksByUserId(userId);
             return  ResponseEntity.ok().body(decks);
@@ -97,7 +117,7 @@ public class CollectionController {
     }*/
 
     @GetMapping("users/{userId}/wishlists/{wishlistId}")
-    public ResponseEntity<?> getWishlistById(@PathParam("userId") int userId, @PathParam("wishlistId") int wishlistId) throws UnAuthorizedException {
+    public ResponseEntity<?> getWishlistById(@PathVariable("userId") int userId, @PathVariable("wishlistId") int wishlistId) throws UnAuthorizedException {
         try{
             Wishlist wishList = wishlistService.getWishListById(wishlistId,userId);
             return  ResponseEntity.ok().body(wishList);
@@ -109,7 +129,7 @@ public class CollectionController {
     }
 
     @GetMapping("/users/{userId}/decks/{deckId}")
-    public ResponseEntity<?> getDeckById(@PathParam("userId") int userId,@PathParam("deckId")int deckId) {
+    public ResponseEntity<?> getDeckById(@PathVariable("userId") int userId,@PathVariable("deckId")int deckId) {
         try{
             Deck deck = deckService.getDeckById(deckId,userId);
             return  ResponseEntity.ok().body(deck);
@@ -148,6 +168,8 @@ public class CollectionController {
    @PostMapping("/decks")
     public ResponseEntity<?> createDeck(@RequestBody Deck deck){
         try{
+            BanList deckBanList = banListService.findBanList(deck.getBanList().getType());
+            deck.setBanList(deckBanList);
             List<CardAmount> cardAmount = cardAmountService.createCardAmount(deck.getCards());
             deck.setCards(cardAmount);
             Deck createDeck = deckService.createDeck(deck);
@@ -204,7 +226,7 @@ public class CollectionController {
     }
 
    @PatchMapping("/decks")
-    public ResponseEntity<?> editDeck(Deck deck){
+    public ResponseEntity<?> editDeck(@RequestBody Deck deck){
         try{
             Deck editedDeck = deckService.editDeck(deck);
             return ResponseEntity.ok().body(editedDeck);
