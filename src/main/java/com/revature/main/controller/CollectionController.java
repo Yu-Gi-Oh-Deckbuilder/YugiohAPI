@@ -5,10 +5,7 @@ import com.revature.main.exceptions.CollectionDoesNotExistException;
 import com.revature.main.exceptions.UnAuthorizedException;
 import com.revature.main.exceptions.UserNotFoundException;
 import com.revature.main.model.*;
-import com.revature.main.service.BanListService;
-import com.revature.main.service.CardAmountService;
-import com.revature.main.service.DeckService;
-import com.revature.main.service.WishlistService;
+import com.revature.main.service.*;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -36,9 +33,9 @@ public class CollectionController {
 
     @Autowired
     BanListService banListService;
-/*
+
     @Autowired
-    InventoryService inventoryService;*/
+    InventoryService inventoryService;
 
     /*@GetMapping
     public ResponseEntity<?> getAllWishlists(@RequestParam("id") int id) {
@@ -77,13 +74,11 @@ public class CollectionController {
         return  ResponseEntity.ok().body(decks);
     }
 
-    /*@GetMapping("/inventories")
-    public ResponseEntity<?> getAllWishlists() {
-        try{
-            List<Inventory> inventories = inventory.getAllinventory();
-            return  ResponseEntity.ok().body(inventories);
-        }
-    }*/
+    @GetMapping("/inventories")
+    public ResponseEntity<?> getAllInventories() {
+        List<Inventory> inventories = inventoryService.getAllCardsInInventory();
+        return  ResponseEntity.ok().body(inventories);
+    }
 
     @GetMapping("/users/{userId}/wishlists")
     public ResponseEntity<?> getAllWishlistsByUserId(@PathVariable("userId") int userId) {
@@ -105,25 +100,23 @@ public class CollectionController {
         }
     }
 
-    /*
-    @GetMapping("/inventory")
-    public ResponseEntity<?> getInventoryByUserId(@RequestParam("id") int id) {
+
+    @GetMapping("/users/{userId}/inventory")
+    public ResponseEntity<?> getInventoryByUserId(@PathVariable("userId") int id) {
         try{
-            Inventory inventory = inventoryService.getInventoryByUserId(id);
+            Inventory inventory = inventoryService.getAllCardsInInventoryByUserId(id);
             return  ResponseEntity.ok().body(inventory);
         }catch(UserNotFoundException e){
             return ResponseEntity.status(400).body(e.getMessage());
         }
-    }*/
+    }
 
     @GetMapping("users/{userId}/wishlists/{wishlistId}")
     public ResponseEntity<?> getWishlistById(@PathVariable("userId") int userId, @PathVariable("wishlistId") int wishlistId) throws UnAuthorizedException {
         try{
             Wishlist wishList = wishlistService.getWishListById(wishlistId,userId);
             return  ResponseEntity.ok().body(wishList);
-        }catch(UserNotFoundException e){
-            return ResponseEntity.status(400).body(e.getMessage());
-        }catch (CollectionDoesNotExistException e){
+        }catch(UserNotFoundException | CollectionDoesNotExistException e){
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
@@ -133,25 +126,23 @@ public class CollectionController {
         try{
             Deck deck = deckService.getDeckById(deckId,userId);
             return  ResponseEntity.ok().body(deck);
-        }catch(UserNotFoundException e){
-            return ResponseEntity.status(400).body(e.getMessage());
-        }catch (CollectionDoesNotExistException e){
+        }catch(UserNotFoundException | CollectionDoesNotExistException e){
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
 
-    /*@GetMapping("/inventory/{inventoryId}")
-    public ResponseEntity<?> getInventoryByUserId(@RequestParam("id") int userId, @PathParam("inventoryId") int inventoryId) {
-        try{
-            Inventory inventory = inventoryService.getInventoryById(inventoryId,userId);
-            return  ResponseEntity.ok().body(inventory);
-        }catch(UserNotFoundException e){
-            return ResponseEntity.status(400).body(e.getMessage());
-        }catch (CollectionDeosNotExistException e){
-            return ResponseEntity.status(400).body(e.getMessage());
-        }
-    }*/
+//    @GetMapping("/inventory/{inventoryId}")
+//    public ResponseEntity<?> getInventoryByUserId(@RequestParam("id") int userId, @PathParam("inventoryId") int inventoryId) {
+//        try{
+//            Inventory inventory = inventoryService.getInventoryById(inventoryId,userId);
+//            return  ResponseEntity.ok().body(inventory);
+//        }catch(UserNotFoundException e){
+//            return ResponseEntity.status(400).body(e.getMessage());
+//        }catch (CollectionDoesNotExistException e){
+//            return ResponseEntity.status(400).body(e.getMessage());
+//        }
+//    }
 
     @PostMapping("/wishlists")
     public ResponseEntity<?> createWishlist(@RequestBody Wishlist wishlist){
@@ -216,7 +207,7 @@ public class CollectionController {
             }
         }*/
     @PutMapping("/wishlists")
-    public ResponseEntity<?> editWishlistById(@RequestBody Wishlist wishlist) throws CardAmountDoesNotExistException {
+    public ResponseEntity<?> editWishlistById(@RequestBody Wishlist wishlist) {
         try{
             Wishlist editedWishlist = wishlistService.editWishlist(wishlist);
             return ResponseEntity.ok().body(editedWishlist);
@@ -234,16 +225,14 @@ public class CollectionController {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
- /*
+
     @PatchMapping("/inventory")
-    public ResponseEntity<?> editInventory(Inventory inventory){
+    public ResponseEntity<?> editInventory(@RequestBody Inventory inventory){
         try{
             Inventory editedInventory = inventoryService.editInventory(inventory);
             return ResponseEntity.ok().body(editedInventory);
-        }catch(UserNotFoundException e){
-            return ResponseEntity.status(400).body(e.getMessage());
-        }catch(DeckDoesNotExistException e){
+        }catch(UserNotFoundException | CollectionDoesNotExistException e){
             return ResponseEntity.status(400).body(e.getMessage());
         }
-    }*/
+    }
 }
