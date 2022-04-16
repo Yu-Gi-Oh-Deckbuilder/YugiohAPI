@@ -22,15 +22,13 @@ public class InventoryService extends EntityService{
 
 
     public List<Inventory> getAllCardsInInventory(){
-        List<Inventory> inventories = inventoryRepository.findAll();
-        return inventories;
+        return inventoryRepository.findAll();
     }
 
     public Inventory getAllCardsInInventoryByUserId(int id) throws UserNotFoundException{
         checkIfUserExists(id);
 
-        Inventory inventory = inventoryRepository.findAllCardsOwnedById(id);
-        return inventory;
+        return inventoryRepository.findAllCardsOwnedById(id);
     }
 
     @Transactional
@@ -76,8 +74,6 @@ public class InventoryService extends EntityService{
             throw new CollectionDoesNotExistException("Deck does not exist");
         }
 
-        Inventory inventory = inventoryRepository.findById(id).get();
-
-        return inventory;
+        return inventoryRepository.findById(id).get();
     }
 }

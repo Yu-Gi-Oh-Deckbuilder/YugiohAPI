@@ -3,9 +3,11 @@ package com.revature.main.service;
 import com.revature.main.dao.InventoryRepository;
 import com.revature.main.dao.UserRepository;
 import com.revature.main.exceptions.CollectionDoesNotExistException;
-import com.revature.main.exceptions.UnAuthorizedException;
 import com.revature.main.exceptions.UserNotFoundException;
-import com.revature.main.model.*;
+import com.revature.main.model.CardAmount;
+import com.revature.main.model.Inventory;
+import com.revature.main.model.Role;
+import com.revature.main.model.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -83,7 +85,7 @@ class InventoryServiceTest {
 
 
     @Test
-    public void getAllInventoryByUserId_positive() throws UserNotFoundException, CollectionDoesNotExistException, UnAuthorizedException {
+    public void getAllInventoryByUserId_positive() throws UserNotFoundException {
 
         when(inventoryRepository.findAllCardsOwnedById(1)).thenReturn(inventory);
         when(userRepository.existsById(1)).thenReturn(true);
@@ -94,9 +96,8 @@ class InventoryServiceTest {
 
     @Test
     public void getAllWishlistByUserId_UserNotExist() {
-        Assertions.assertThrows(UserNotFoundException.class,  () ->{
-            inventoryService.getAllCardsInInventoryByUserId(1);
-        });
+        Assertions.assertThrows(UserNotFoundException.class,
+                () -> inventoryService.getAllCardsInInventoryByUserId(1));
     }
 
 
@@ -114,18 +115,16 @@ class InventoryServiceTest {
 
     @Test
     public void getInventoryById_UserNotFoundException(){
-        Assertions.assertThrows(UserNotFoundException.class,  () ->{
-            inventoryService.getInventoryById(1,user.getId());
-        });
+        Assertions.assertThrows(UserNotFoundException.class,
+                () -> inventoryService.getInventoryById(1,user.getId()));
     }
 
     @Test
     public void getInventoryById_CollectionDoesNotExistException(){
         when(userRepository.existsById(1)).thenReturn(true);
 
-        Assertions.assertThrows(CollectionDoesNotExistException.class,  () ->{
-            inventoryService.getInventoryById(1,user.getId());
-        });
+        Assertions.assertThrows(CollectionDoesNotExistException.class,
+                () -> inventoryService.getInventoryById(1,user.getId()));
     }
 
 
@@ -147,17 +146,15 @@ class InventoryServiceTest {
     }
 
     @Test public void editInventory_CollectionDoesNotExistException(){
-        Assertions.assertThrows(CollectionDoesNotExistException.class,()->{
-            inventoryService.editInventory(inventory);
-        });
+        Assertions.assertThrows(CollectionDoesNotExistException.class,
+                ()-> inventoryService.editInventory(inventory));
     }
 
     @Test public void editInventory_UserNotFoundException(){
         when(inventoryRepository.existsById(inventory.getId())).thenReturn(true);
 
-        Assertions.assertThrows(UserNotFoundException.class,()->{
-            inventoryService.editInventory(inventory);
-        });
+        Assertions.assertThrows(UserNotFoundException.class,
+                ()-> inventoryService.editInventory(inventory));
     }
 
     @Test
@@ -183,8 +180,7 @@ class InventoryServiceTest {
 
     @Test
     public void createInventory_UserNotFoundException(){
-        Assertions.assertThrows(UserNotFoundException.class, ()->{
-            inventoryService.createInventory(inventory);
-        });
+        Assertions.assertThrows(UserNotFoundException.class,
+                ()-> inventoryService.createInventory(inventory));
     }
 }
