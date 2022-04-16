@@ -54,7 +54,7 @@ public class DeckService extends EntityService{
             throw new UserNotFoundException("User with id "+target.getOwner().getId()+ " does not exist");
         }
 
-        Deck source = deckRepository.getById(target.getId());
+        Deck source = deckRepository.findById(target.getId()).get();
         source.setCards(target.getCards());
         source.setBanList(target.getBanList());
         return deckRepository.saveAndFlush(source);

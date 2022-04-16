@@ -71,7 +71,8 @@ public class UserService extends EntityService{
 
         validateUserData(user);
 
-        return userRepository.save(user);
+        //flushing will save the object to the database
+        return userRepository.saveAndFlush(user);
     }
 
     public void validateUserData(User user){

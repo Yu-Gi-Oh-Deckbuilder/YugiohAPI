@@ -86,7 +86,7 @@ public class CollectionControllerTest {
         inventory.setCards(cards);
     }
 
-    @Test
+   /* @Test
     public void getAllCollectionsByUserId_positive() throws UserNotFoundException {
         List<Collection> allCollections = new ArrayList<>();
         List<Wishlist> allWishlist = new ArrayList<>();
@@ -103,7 +103,7 @@ public class CollectionControllerTest {
         List<Collection> collectionList = (List<Collection>) responseEntity.getBody();
 
         assertThat(allCollections).isEqualTo(collectionList);
-    }
+    }*/
 /*
     @Test
     public void getAllCollectionsByUserId_UserNotFoundException(){
