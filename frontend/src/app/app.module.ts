@@ -22,12 +22,14 @@ import { AuthEffects } from './shared/service/auth/state/';
 import { reducers } from './app.state';
 import { HomepageComponent } from './homepage/homepage.component';
 import { CardEffects } from './shared/service/card/state';
+import { WishlistComponent } from './wishlist/wishlist.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginDialog,
-    HomepageComponent
+    HomepageComponent,
+    WishlistComponent
   ],
   imports: [
     BrowserModule,

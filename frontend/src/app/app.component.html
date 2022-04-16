@@ -4,6 +4,11 @@
       <mat-icon>home</mat-icon>
     </a>  
   </span>
+  <span *ngIf="(isAuthenticated | async)">
+    <a routerLink="/wishlists">
+      <p>Wishlists</p>
+    </a>  
+  </span>
   <span class="spacer"></span>
   <span *ngIf="!(isAuthenticated | async)">
     <button mat-icon-button (click)="login()">
