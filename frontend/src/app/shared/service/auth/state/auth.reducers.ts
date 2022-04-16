@@ -19,6 +19,7 @@ const authReducer = createReducer(
       errorMessage: message,
     }
   }),
+  on(fromActions.logout, () => fromState.initialState),
 );
 
 export function reducer(state: fromState.State | undefined, action: Action): fromState.State {

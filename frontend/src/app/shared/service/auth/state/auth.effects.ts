@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, map, mergeMap, of } from "rxjs";
+import { catchError, map, mergeMap, of, tap } from "rxjs";
 import { AuthService } from "../auth.service";
 import * as fromActions from "./auth.actions";
 
@@ -10,6 +11,7 @@ export class AuthEffects {
   constructor(
     private actions$: Actions,
     private auth: AuthService,
+    private router: Router
   )
   {}
 
@@ -30,5 +32,17 @@ export class AuthEffects {
         )
       )
     )
+  );
+
+  logout$ = createEffect(()=>
+  this.actions$.pipe(
+      ofType(fromActions.logout),
+      tap(() => {localStorage.removeItem('jwt');
+      this.router.navigate(['']);
+      })
+    ),
+    {
+      dispatch: false
+    }
   );
 }

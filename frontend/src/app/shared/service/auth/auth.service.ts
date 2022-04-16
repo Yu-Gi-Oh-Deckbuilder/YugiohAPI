@@ -38,4 +38,8 @@ export class AuthService {
    isAuthenticated(): Observable<boolean> {
      return this.store.select(AuthSelectors.selectIsAuthenticated);
    }
+
+   logout(){
+     this.store.dispatch(AuthActions.logout());
+   }
 }
