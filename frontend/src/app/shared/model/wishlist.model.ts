@@ -4,7 +4,7 @@ import { User } from "./user.model";
 export interface Wishlist{
     id:number;
     cards:CardAmount[];
-    owner:string;
+    owner:User;
     name:string;
     shareUsers:User[];
 }

@@ -9,6 +9,7 @@ import { MatCardModule } from '@angular/material/card'
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatDialogModule } from '@angular/material/dialog'
 import { MatInputModule } from '@angular/material/input'
+import {MatTableModule} from '@angular/material/table';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -44,6 +45,7 @@ import { WishlistComponent } from './wishlist/wishlist.component';
     MatFormFieldModule,
     MatDialogModule,
     MatInputModule,
+    MatTableModule,
     StoreModule.forRoot(reducers, {}),
     EffectsModule.forRoot([
       AuthEffects.AuthEffects,
