@@ -190,7 +190,7 @@ public class CollectionController {
     }*/
 
     @DeleteMapping("/wishlists/{wishlistId}")
-    public ResponseEntity<?> deleteWishlistById(@RequestParam("wishlistId")int wishlistId){
+    public ResponseEntity<?> deleteWishlistById(@PathVariable("wishlistId")int wishlistId){
         if (wishlistService.deleteWishlistById(wishlistId)) {
             return ResponseEntity.ok().body(true);
         } else {
@@ -199,7 +199,7 @@ public class CollectionController {
     }
 
     @DeleteMapping("/decks/{deckId}")
-    public ResponseEntity<?> deleteDeck(@RequestParam("deckId") int deckId){
+    public ResponseEntity<?> deleteDeck(@PathVariable("deckId") int deckId){
         if (deckService.deleteDeckById(deckId)) {
             return ResponseEntity.ok().body(true);
         } else {
