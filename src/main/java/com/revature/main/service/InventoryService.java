@@ -26,19 +26,15 @@ public class InventoryService extends EntityService{
         return inventories;
     }
 
-
-
-    public List<Inventory> getAllCardsInIneventoryById(int id) throws UserNotFoundException{
-
-
+    public Inventory getAllCardsInInventoryByUserId(int id) throws UserNotFoundException{
         checkIfUserExists(id);
 
-        List<Inventory> inventories = inventoryRepository.findAllCardsOwnedById(id);
-        return inventories;
+        Inventory inventory = inventoryRepository.findAllCardsOwnedById(id);
+        return inventory;
     }
 
     @Transactional
-    public Inventory editinventory(Inventory inventory) throws UserNotFoundException, CollectionDoesNotExistException{
+    public Inventory editInventory(Inventory inventory) throws UserNotFoundException, CollectionDoesNotExistException{
 
         if(!inventoryRepository.existsById((inventory.getId()))){
             throw new CollectionDoesNotExistException("Inventory with id "+inventory.getId()+" does not exist");
@@ -63,9 +59,6 @@ public class InventoryService extends EntityService{
         return inventory;
     }
 
-
-
-    //TODO: delete by id
     @Transactional
     public boolean deleteInventoryById(int id){
         if ( !inventoryRepository.existsById(id)){

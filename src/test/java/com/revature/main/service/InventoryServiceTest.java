@@ -64,13 +64,13 @@ class InventoryServiceTest {
         inventory.setCards(cards);
 
         inventory2.setId(2);
-        inventory2.setOwner(user);
+        inventory2.setOwner(user2);
         inventory2.setCards(cards);
 
     }
 
     @Test
-    public void getAllInventories() {
+    public void getAllInventories_positive() {
         List<Inventory> inventories = new ArrayList<>();
         inventories.add(inventory);
         inventories.add(inventory2);
@@ -84,21 +84,18 @@ class InventoryServiceTest {
 
     @Test
     public void getAllInventoryByUserId_positive() throws UserNotFoundException, CollectionDoesNotExistException, UnAuthorizedException {
-        List<Inventory> inventories = new ArrayList<>();
-        inventories.add(inventory);
-        inventories.add(inventory2);
 
-        when(inventoryRepository.findAllCardsOwnedById(1)).thenReturn(inventories);
+        when(inventoryRepository.findAllCardsOwnedById(1)).thenReturn(inventory);
         when(userRepository.existsById(1)).thenReturn(true);
-        List<Inventory> actual = inventoryService.getAllCardsInIneventoryById(1);
+        Inventory actual = inventoryService.getAllCardsInInventoryByUserId(1);
 
-        assertThat(actual).isEqualTo(inventories);
+        assertThat(actual).isEqualTo(inventory);
     }
 
     @Test
     public void getAllWishlistByUserId_UserNotExist() {
         Assertions.assertThrows(UserNotFoundException.class,  () ->{
-            inventoryService.getAllCardsInIneventoryById(1);
+            inventoryService.getAllCardsInInventoryByUserId(1);
         });
     }
 
@@ -144,14 +141,14 @@ class InventoryServiceTest {
         expected.setId(inventory.getId());
 
         when(inventoryRepository.saveAndFlush(expected)).thenReturn(expected);
-        Inventory actual = inventoryService.editinventory(expected);
+        Inventory actual = inventoryService.editInventory(expected);
 
         assertThat(actual).isEqualTo(expected);
     }
 
     @Test public void editInventory_CollectionDoesNotExistException(){
         Assertions.assertThrows(CollectionDoesNotExistException.class,()->{
-            inventoryService.editinventory(inventory);
+            inventoryService.editInventory(inventory);
         });
     }
 
@@ -159,7 +156,7 @@ class InventoryServiceTest {
         when(inventoryRepository.existsById(inventory.getId())).thenReturn(true);
 
         Assertions.assertThrows(UserNotFoundException.class,()->{
-            inventoryService.editinventory(inventory);
+            inventoryService.editInventory(inventory);
         });
     }
 

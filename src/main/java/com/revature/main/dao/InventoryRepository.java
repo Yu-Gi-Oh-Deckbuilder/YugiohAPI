@@ -11,7 +11,7 @@ import java.util.List;
 public interface InventoryRepository extends JpaRepository<Inventory, Integer> {
 
    @Query("SELECT r FROM Inventory r JOIN r.owner a WHERE a.id = ?1")
-    List<Inventory> findAllCardsOwnedById(int userId);
+    Inventory findAllCardsOwnedById(int userId);
 
 
 
