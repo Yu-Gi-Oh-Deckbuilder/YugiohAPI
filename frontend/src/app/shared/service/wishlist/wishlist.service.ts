@@ -2,16 +2,19 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../app.state';
+import { Wishlist } from '../../model/wishlist.model';
+import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
 export class WishlistService {
 
+  private wishlistUrl = `http://localhost:9011/collections/users/${2}/wishlists`;
   constructor(private store: Store<AppState>,private http: HttpClient) { }
 
   //TODO: Get all wishlists by userId 
-  getWishlistsByUserId(){
-
+  getWishlistsByUserId(userId:number):Observable<Wishlist[]>{
+    return this.http.get<Wishlist[]>(this.wishlistUrl);
   }
   //TODO: Get wishlist by wishlistId 
   //TODO: Create wishlist 
