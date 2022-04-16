@@ -53,6 +53,14 @@ values (1, 2),
 (2, 2),
 (3, 2);
 
+insert into inventory (owner_id)
+values (1),
+(2),
+(3),
+(4);
 
-
-
+insert into inventory_cards (inventory_id, cards_id)
+values (2, 1),
+(2,2),
+(2,3),
+(2,4);
