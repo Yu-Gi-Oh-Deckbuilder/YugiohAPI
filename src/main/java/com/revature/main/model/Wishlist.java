@@ -17,6 +17,4 @@ public class Wishlist extends Collection {
     @ManyToMany
     private List<User> sharedUsers;
 
-    @ManyToMany
-    private List<User> sharedUsers;
 }
