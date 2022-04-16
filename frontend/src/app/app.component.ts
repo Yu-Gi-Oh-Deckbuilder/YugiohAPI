@@ -39,7 +39,6 @@ export class AppComponent {
   }
 
   logout() {
-    //TODO
+    this.auth.logout();
   }
-
 }
