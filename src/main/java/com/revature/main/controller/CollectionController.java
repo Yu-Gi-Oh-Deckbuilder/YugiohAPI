@@ -206,7 +206,7 @@ public class CollectionController {
                 return ResponseEntity.status(400).body(false);
             }
         }*/
-    @PutMapping("/wishlists")
+    @PatchMapping("/wishlists")
     public ResponseEntity<?> editWishlistById(@RequestBody Wishlist wishlist) {
         try{
             Wishlist editedWishlist = wishlistService.editWishlist(wishlist);
