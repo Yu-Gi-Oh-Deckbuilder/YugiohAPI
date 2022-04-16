@@ -117,7 +117,7 @@ public class UserServiceTest {
     public void createUser_positive(){
         Role role = new Role(1, "user");
         User user = new User(2, "test", "password", "test", "test", "test@test.com", role);
-        when(userRepository.save(user)).thenReturn(user);
+        when(userRepository.saveAndFlush(user)).thenReturn(user);
         User actual = userService.createUser(user);
         assertThat(actual).isEqualTo(user);
     }

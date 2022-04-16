@@ -38,7 +38,7 @@ public class DeckService extends EntityService{
             throw new CollectionDoesNotExistException("Deck does not exist");
         }
 
-       Deck deck = deckRepository.getById(id);
+       Deck deck = deckRepository.findById(id).get();
 
         return deck;
     }
@@ -54,10 +54,10 @@ public class DeckService extends EntityService{
             throw new UserNotFoundException("User with id "+target.getOwner().getId()+ " does not exist");
         }
 
-        Deck source = deckRepository.getById(target.getId());
+        Deck source = deckRepository.findById(target.getId()).get();
         source.setCards(target.getCards());
         source.setBanList(target.getBanList());
-        return source;
+        return deckRepository.saveAndFlush(source);
     }
 
     @Transactional
@@ -73,7 +73,7 @@ public class DeckService extends EntityService{
     public Deck createDeck(Deck deck) throws UserNotFoundException {
         checkIfUserExists(deck.getOwner().getId());
 
-        deckRepository.save(deck);
+        deckRepository.saveAndFlush(deck);
 
         return deck;
     }

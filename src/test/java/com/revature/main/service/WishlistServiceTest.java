@@ -6,6 +6,7 @@ import com.revature.main.dao.WishlistRepository;
 import com.revature.main.exceptions.UnAuthorizedException;
 import com.revature.main.exceptions.UserNotFoundException;
 import com.revature.main.exceptions.CollectionDoesNotExistException;
+import com.revature.main.model.CardAmount;
 import com.revature.main.model.Role;
 import com.revature.main.model.User;
 import com.revature.main.model.Wishlist;
@@ -31,7 +32,7 @@ public class WishlistServiceTest {
     private static User user2;
     private static  Role role;
     private static Wishlist wishlist;
-    private static HashMap<Integer,Integer> cards;
+    private static List<CardAmount> cards;
 
     @Mock
     WishlistRepository wishlistRepository;
@@ -49,9 +50,8 @@ public class WishlistServiceTest {
         user2 =  new User(2,"test2", "testpass", "test", "test", "test@email.com", role);
         wishlist = new Wishlist();
 
-        cards = new HashMap<>();
-        cards.put(1,1);
-        cards.put(2,2);
+        cards = new ArrayList<>();
+        cards.add(new CardAmount());
 
         wishlist.setId(1);
         wishlist.setOwner(user);
@@ -148,6 +148,7 @@ public class WishlistServiceTest {
         expected.setOwner(wishlist.getOwner());
         expected.setId(wishlist.getId());
 
+        when(wishlistRepository.saveAndFlush(expected)).thenReturn(expected);
         Wishlist actual = wishlistService.editWishlist(expected);
 
         assertThat(actual).isEqualTo(expected);

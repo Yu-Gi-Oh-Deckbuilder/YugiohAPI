@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -38,7 +39,7 @@ public class DeckServiceTest {
     private static  Role role;
     private static Deck deck;
     private static Deck deck2;
-    private static HashMap<Integer,Integer> cards;
+    private static List<CardAmount> cards;
     private static BanList banList;
 
     @BeforeAll
@@ -49,9 +50,8 @@ public class DeckServiceTest {
         deck = new Deck();
         deck2 = new Deck();
 
-        cards = new HashMap<>();
-        cards.put(1,1);
-        cards.put(2,2);
+        cards = new ArrayList<>();
+        cards.add(new CardAmount());
 
         banList = new BanList(1, "TCG");
 
@@ -100,7 +100,7 @@ public class DeckServiceTest {
 
     @Test
     public void getDeckById_positive() throws UserNotFoundException, CollectionDoesNotExistException {
-        when(deckRepository.getById(1)).thenReturn(deck);
+        when(deckRepository.findById(1)).thenReturn(Optional.of(deck));
         when(deckRepository.existsById(1)).thenReturn(true);
         when(userRepository.existsById(1)).thenReturn(true);
         Deck actual = deckService.getDeckById(1,user.getId());
@@ -128,7 +128,7 @@ public class DeckServiceTest {
     @Test
     public void editDeck_positive() throws UserNotFoundException, CollectionDoesNotExistException {
 
-        when(deckRepository.getById(1)).thenReturn(deck);
+        when(deckRepository.findById(1)).thenReturn(Optional.of(deck));
         when(deckRepository.existsById(deck.getId())).thenReturn(true);
         when(userRepository.existsById(deck.getOwner().getId())).thenReturn(true);
         Deck expected = new Deck();
@@ -136,6 +136,7 @@ public class DeckServiceTest {
         expected.setOwner(deck.getOwner());
         expected.setId(deck.getId());
 
+        when(deckRepository.saveAndFlush(expected)).thenReturn(expected);
         Deck actual = deckService.editDeck(expected);
 
         assertThat(actual).isEqualTo(expected);
@@ -170,8 +171,8 @@ public class DeckServiceTest {
 
     @Test
     public void createDeck_positive() throws UserNotFoundException {
-        when(deckRepository.save(deck)).thenReturn(deck);
         when(userRepository.existsById(deck.getOwner().getId())).thenReturn(true);
+
         Deck actual = deckService.createDeck(deck);
         assertThat(actual).isEqualTo(deck);
     }
