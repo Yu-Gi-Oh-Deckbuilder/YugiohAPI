@@ -24,13 +24,15 @@ import { reducers } from './app.state';
 import { HomepageComponent } from './homepage/homepage.component';
 import { CardEffects } from './shared/service/card/state';
 import { WishlistComponent } from './wishlist/wishlist.component';
+import { WishlistsComponent } from './wishlists/wishlists.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginDialog,
     HomepageComponent,
-    WishlistComponent
+    WishlistComponent,
+    WishlistsComponent
   ],
   imports: [
     BrowserModule,
