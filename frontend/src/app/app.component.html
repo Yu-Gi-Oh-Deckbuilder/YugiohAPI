@@ -1,4 +1,9 @@
 <mat-toolbar>
+  <span *ngIf="!(isAuthenticated | async)">
+    <a routerLink="/">
+      <mat-icon>home</mat-icon>
+    </a>  
+  </span>
   <span class="spacer"></span>
   <span *ngIf="!(isAuthenticated | async)">
     <button mat-icon-button (click)="login()">

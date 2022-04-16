@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { MatToolbarModule } from '@angular/material/toolbar'
@@ -18,19 +18,23 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { LoginDialog } from './dialog/login.dialog';
-import { AuthEffects } from './shared/state/auth.effects';
+import { AuthEffects } from './shared/service/auth/state/';
 import { reducers } from './app.state';
+import { HomepageComponent } from './homepage/homepage.component';
+import { CardEffects } from './shared/service/card/state';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginDialog
+    LoginDialog,
+    HomepageComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     MatToolbarModule,
     MatIconModule,
@@ -39,7 +43,10 @@ import { reducers } from './app.state';
     MatDialogModule,
     MatInputModule,
     StoreModule.forRoot(reducers, {}),
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([
+      AuthEffects.AuthEffects,
+      CardEffects.CardEffects,
+    ]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
   ],
   providers: [],

@@ -24,6 +24,7 @@ import java.util.NoSuchElementException;
 @Profile("prod")
 @RestController
 @RequestMapping("/users")
+@CrossOrigin
 public class UserController {
     @Autowired
     @Getter
