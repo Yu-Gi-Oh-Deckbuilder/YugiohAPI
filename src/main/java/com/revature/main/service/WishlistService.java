@@ -8,6 +8,7 @@ import com.revature.main.exceptions.CollectionDoesNotExistException;
 import com.revature.main.model.CardAmount;
 import com.revature.main.model.User;
 import com.revature.main.model.Wishlist;
+import com.revature.main.util.CollectionUtility;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,7 @@ public class WishlistService extends EntityService{
     }
 
     public Wishlist getWishListById(int id, int userId) throws UserNotFoundException, UnAuthorizedException, CollectionDoesNotExistException {
-        User user = userRepository.getById(userId);
+        User user = userRepository.findById(userId).get();
 
         checkIfUserExists(userId);
 
@@ -44,10 +45,10 @@ public class WishlistService extends EntityService{
             throw new CollectionDoesNotExistException("Wishlist does not exist");
         }
 
-        Wishlist wishlist = wishlistRepository.getById(id);
+        Wishlist wishlist = wishlistRepository.findById(id).get();
 
 
-        if(!wishlist.getSharedUsers().contains(user)){
+        if(! wishlist.getSharedUsers().contains(user)){
             throw new UnAuthorizedException("You cannot view this wishlist");
         }
 
@@ -68,6 +69,7 @@ public class WishlistService extends EntityService{
         source.setName(target.getName());
         source.setSharedUsers(target.getSharedUsers());
         source.setCards(target.getCards());
+        source.setTotalCards(CollectionUtility.calculateTotal(target.getCards()));
 
         //flushing will save the object to the database
         Wishlist wishlist = wishlistRepository.saveAndFlush(source);
@@ -87,6 +89,7 @@ public class WishlistService extends EntityService{
     public Wishlist createWishlist(Wishlist wishlist) throws UserNotFoundException {
         checkIfUserExists(wishlist.getOwner().getId());
 
+        wishlist.setTotalCards(CollectionUtility.calculateTotal(wishlist.getCards()));
         wishlistRepository.save(wishlist);
 
         return wishlist;

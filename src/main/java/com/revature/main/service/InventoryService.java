@@ -5,6 +5,7 @@ import com.revature.main.dao.InventoryRepository;
 import com.revature.main.exceptions.CollectionDoesNotExistException;
 import com.revature.main.exceptions.UserNotFoundException;
 import com.revature.main.model.Inventory;
+import com.revature.main.util.CollectionUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +45,7 @@ public class InventoryService extends EntityService{
 
         Inventory source = inventoryRepository.findById(inventory.getId()).get();
         source.setCards(inventory.getCards());
+        source.setTotalCards(CollectionUtility.calculateTotal(inventory.getCards()));
         return inventoryRepository.saveAndFlush(source);
     }
 
@@ -52,6 +54,7 @@ public class InventoryService extends EntityService{
     public Inventory createInventory(Inventory inventory) throws UserNotFoundException {
         checkIfUserExists(inventory.getOwner().getId());
 
+        inventory.setTotalCards(CollectionUtility.calculateTotal(inventory.getCards()));
         inventoryRepository.saveAndFlush(inventory);
 
         return inventory;

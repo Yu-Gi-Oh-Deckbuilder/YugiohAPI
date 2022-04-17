@@ -13,11 +13,11 @@ values ('admin', 'admin', 'John', 'Doe', 'johndoe@email.com', 2),
 insert into ban_list(type)
 values('TCG'),('OCG'),('GOAT'),('FreeForm');
 
-insert into deck (name, owner_id,ban_list_id)
-values ('deck1',2,1),
-('deck2',2,2),
-('deck3',2,3),
-('deck4',2,4);
+insert into deck (name, owner_id,ban_list_id,total_cards)
+values ('deck1',2,1,3),
+('deck2',2,2,1),
+('deck3',2,3,2),
+('deck4',2,4,1);
 
 insert into card_amount(card_id,card_amount)
 VALUES(59575539,3),
@@ -41,11 +41,11 @@ VALUES (1,1),
 (3,3),
 (4,4);
 
-insert into wishlist (name,owner_id)
-values('wishlist1',2),
-('wishlist2',2),
-('wishlist3',2),
-('wishlist4',2);
+insert into wishlist (name,owner_id,total_cards)
+values('wishlist1',2,3),
+('wishlist2',2,1),
+('wishlist3',2,2),
+('wishlist4',2,1);
 
 insert into wishlist_cards(wishlist_id,cards_id)
 VALUES (1,5),
@@ -63,11 +63,11 @@ values (1, 2),
 (2, 2),
 (3, 2);
 
-insert into inventory (owner_id)
-values (1),
-(2),
-(3),
-(4);
+insert into inventory (owner_id,total_cards)
+values (1,3),
+(2,1),
+(3,2),
+(4,1);
 
 insert into inventory_cards (inventory_id, cards_id)
 values (2, 9),
