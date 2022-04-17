@@ -71,6 +71,8 @@ public class UserService extends EntityService{
 
         validateUserData(user);
 
+        // TODO add inventory for the user
+
         //flushing will save the object to the database
         return userRepository.saveAndFlush(user);
     }

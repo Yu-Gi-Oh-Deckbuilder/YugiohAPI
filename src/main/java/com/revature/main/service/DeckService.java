@@ -6,6 +6,7 @@ import com.revature.main.exceptions.UserNotFoundException;
 import com.revature.main.exceptions.CollectionDoesNotExistException;
 import com.revature.main.model.Deck;
 
+import com.revature.main.util.CollectionUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,6 +58,7 @@ public class DeckService extends EntityService{
         Deck source = deckRepository.findById(target.getId()).get();
         source.setCards(target.getCards());
         source.setBanList(target.getBanList());
+        source.setTotalCards(CollectionUtility.calculateTotal(target.getCards()));
         return deckRepository.saveAndFlush(source);
     }
 
@@ -73,6 +75,7 @@ public class DeckService extends EntityService{
     public Deck createDeck(Deck deck) throws UserNotFoundException {
         checkIfUserExists(deck.getOwner().getId());
 
+        deck.setTotalCards(CollectionUtility.calculateTotal(deck.getCards()));
         deckRepository.saveAndFlush(deck);
 
         return deck;

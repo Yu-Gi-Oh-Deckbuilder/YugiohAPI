@@ -22,6 +22,9 @@ public class Collection {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<CardAmount> cards;
 
+    @Column
+    private int totalCards;
+
     @ManyToOne
     private User owner;
 }

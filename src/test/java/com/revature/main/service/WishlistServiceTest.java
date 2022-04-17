@@ -24,6 +24,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 public class WishlistServiceTest {
@@ -83,9 +84,9 @@ public class WishlistServiceTest {
 
     @Test
     public void getWishlistById_positive() throws UserNotFoundException, UnAuthorizedException, CollectionDoesNotExistException {
-        when(userRepository.getById(1)).thenReturn(user);
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
 
-        when(wishlistRepository.getById(1)).thenReturn(wishlist);
+        when(wishlistRepository.findById(1)).thenReturn(Optional.of(wishlist));
         when(wishlistRepository.existsById(1)).thenReturn(true);
         when(userRepository.existsById(1)).thenReturn(true);
         Wishlist actual = wishlistService.getWishListById(1,user.getId());
@@ -95,9 +96,9 @@ public class WishlistServiceTest {
 
     @Test
     public void getWishlistById_SharedUser() throws UserNotFoundException, UnAuthorizedException, CollectionDoesNotExistException {
-        when(userRepository.getById(2)).thenReturn(user2);
+        when(userRepository.findById(2)).thenReturn(Optional.of(user2));
 
-        when(wishlistRepository.getById(1)).thenReturn(wishlist);
+        when(wishlistRepository.findById(1)).thenReturn(Optional.of(wishlist));
         when(wishlistRepository.existsById(1)).thenReturn(true);
         when(userRepository.existsById(2)).thenReturn(true);
         Wishlist actual = wishlistService.getWishListById(1,user2.getId());
@@ -107,7 +108,7 @@ public class WishlistServiceTest {
 
     @Test
     public void getWishlistById_UserNotFoundException(){
-        when(userRepository.getById(user.getId())).thenReturn(new User());
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(new User()));
 
         Assertions.assertThrows(UserNotFoundException.class,  () ->{
             wishlistService.getWishListById(1,user.getId());
@@ -118,10 +119,10 @@ public class WishlistServiceTest {
     public void getWishlistById_UnAuthorizedException(){
         User user3 = new User(3,"test2", "testpass", "test", "test", "test@email.com", role);
 
-        when(userRepository.getById(3)).thenReturn(user3);
+        when(userRepository.findById(3)).thenReturn(Optional.of(user3));
 
         when(userRepository.existsById(3)).thenReturn(true);
-        when(wishlistRepository.getById(1)).thenReturn(wishlist);
+        when(wishlistRepository.findById(1)).thenReturn(Optional.of(wishlist));
         when(wishlistRepository.existsById(1)).thenReturn(true);
         Assertions.assertThrows(UnAuthorizedException.class,()->{
            wishlistService.getWishListById(1,user3.getId());
@@ -130,7 +131,7 @@ public class WishlistServiceTest {
 
     @Test
     public void getWishlistById_WishlistDoesNotExistException() {
-       when(userRepository.getById(2)).thenReturn(user2);
+       when(userRepository.findById(2)).thenReturn(Optional.of(user2));
        when(userRepository.existsById(2)).thenReturn(true);
        Assertions.assertThrows(CollectionDoesNotExistException.class,()->{
           wishlistService.getWishListById(1,user2.getId());
@@ -196,8 +197,4 @@ public class WishlistServiceTest {
             wishlistService.createWishlist(wishlist);
         });
     }
-
-
-
-
 }
