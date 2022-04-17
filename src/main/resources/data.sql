@@ -23,6 +23,16 @@ insert into card_amount(card_id,card_amount)
 VALUES(59575539,3),
 (46986414,1),
 (61370518,2),
+(83347294,1),
+
+(59575539,3),
+(46986414,1),
+(61370518,2),
+(83347294,1),
+
+(59575539,3),
+(46986414,1),
+(61370518,2),
 (83347294,1);
 
 insert into deck_cards(deck_id,cards_id)
@@ -38,10 +48,10 @@ values('wishlist1',2),
 ('wishlist4',2);
 
 insert into wishlist_cards(wishlist_id,cards_id)
-VALUES (1,1),
-(2,2),
-(3,3),
-(4,4);
+VALUES (1,5),
+(2,6),
+(3,7),
+(4,8);
 
 
 insert into wishlist_shared_users (wishlist_id,	shared_users_id)
@@ -53,6 +63,14 @@ values (1, 2),
 (2, 2),
 (3, 2);
 
+insert into inventory (owner_id)
+values (1),
+(2),
+(3),
+(4);
 
-
-
+insert into inventory_cards (inventory_id, cards_id)
+values (2, 9),
+(2,10),
+(2,11),
+(2,12);

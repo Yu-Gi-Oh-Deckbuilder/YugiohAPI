@@ -1,15 +1,10 @@
 package com.revature.main.controller;
 
-import com.revature.main.exceptions.CardAmountDoesNotExistException;
 import com.revature.main.exceptions.CollectionDoesNotExistException;
 import com.revature.main.exceptions.UnAuthorizedException;
 import com.revature.main.exceptions.UserNotFoundException;
 import com.revature.main.model.*;
-import com.revature.main.service.BanListService;
-import com.revature.main.service.CardAmountService;
-import com.revature.main.service.DeckService;
-import com.revature.main.service.WishlistService;
-import org.junit.jupiter.api.Assertions;
+import com.revature.main.service.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -29,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CollectionControllerTest {
 
     private static User user;
-    private static Role role;
     private static Wishlist wishlist;
     private static Inventory inventory;
     private static Deck deck;
@@ -48,15 +41,15 @@ public class CollectionControllerTest {
     @Mock
     BanListService banListService;
 
-   // @Mock
-   // InventoryService inventoryServiceService;
+    @Mock
+    InventoryService inventoryService;
 
     @InjectMocks
     private CollectionController collectionsController;
 
     @BeforeAll
     public static void init(){
-        role = new Role(1,"user");
+        Role role = new Role(1, "user");
         user = new User(1,"test", "testpass", "test", "test", "test@email.com", role);
 
         wishlist = new Wishlist();
@@ -71,7 +64,7 @@ public class CollectionControllerTest {
         wishlist.setId(1);
         wishlist.setOwner(user);
         wishlist.setCards(cards);
-        wishlist.setSharedUsers(new ArrayList<User>());
+        wishlist.setSharedUsers(new ArrayList<>());
         wishlist.getSharedUsers().add(user);
 
         banList.setId(1);
@@ -119,7 +112,7 @@ public class CollectionControllerTest {
         allWishlist.add(wishlist);
 
         when(wishListService.getAllWishlistByUserId(1)).thenReturn((allWishlist));
-        ResponseEntity responseEntity = collectionsController.getAllWishlistsByUserId(user.getId());
+        ResponseEntity<?> responseEntity = collectionsController.getAllWishlistsByUserId(user.getId());
 
         List<Wishlist> collectionList = (List<Wishlist>) responseEntity.getBody();
 
@@ -132,7 +125,7 @@ public class CollectionControllerTest {
 
         decks.add(deck);
         when(deckService.getAllDecksByUserId(1)).thenReturn(decks);
-        ResponseEntity responseEntity = collectionsController.getAllDecksByUserId(user.getId());
+        ResponseEntity<?> responseEntity = collectionsController.getAllDecksByUserId(user.getId());
 
         List<Deck> deckList = (List<Deck>) responseEntity.getBody();
 
@@ -140,21 +133,21 @@ public class CollectionControllerTest {
 
     }
 
-    /*
-    @Test void getInventoryByUserId_positive(){
-        when(deckService.getAllInventoryByUserId(1)).thenReturn(inventory);
-        ResponseEntity responseEntity = collectionsController.getInventoryByUserId(user.getId());
+
+    @Test void getInventoryByUserId_positive() throws UserNotFoundException {
+        when(inventoryService.getAllCardsInInventoryByUserId(1)).thenReturn(inventory);
+        ResponseEntity<?> responseEntity = collectionsController.getInventoryByUserId(user.getId());
 
         Inventory target = (Inventory) responseEntity.getBody();
 
         assertThat(inventory).isEqualTo(target);
-    }*/
+    }
 
     @Test
     public void getWishlistById_positive() throws UserNotFoundException, CollectionDoesNotExistException, UnAuthorizedException {
         when(wishListService.getWishListById(1,1)).thenReturn(wishlist);
 
-        ResponseEntity responseEntity = collectionsController.getWishlistById(user.getId(),wishlist.getId());
+        ResponseEntity<?> responseEntity = collectionsController.getWishlistById(user.getId(),wishlist.getId());
         Wishlist target = (Wishlist) responseEntity.getBody();
 
         assertThat(wishlist).isEqualTo(target);
@@ -164,7 +157,7 @@ public class CollectionControllerTest {
     public void getDeckById_positive() throws UserNotFoundException, CollectionDoesNotExistException {
         when(deckService.getDeckById(1,1)).thenReturn(deck);
 
-        ResponseEntity responseEntity = collectionsController.getDeckById(user.getId(),deck.getId());
+        ResponseEntity<?> responseEntity = collectionsController.getDeckById(user.getId(),deck.getId());
         Deck target = (Deck) responseEntity.getBody();
 
         assertThat(deck).isEqualTo(target);
@@ -181,28 +174,28 @@ public class CollectionControllerTest {
     }*/
 
     @Test
-    public void deleteWishlistById_positive() throws UserNotFoundException {
+    public void deleteWishlistById_positive() {
         when(wishListService.deleteWishlistById(1)).thenReturn(true);
-        ResponseEntity actual =  collectionsController.deleteWishlistById(1);
+        ResponseEntity<?> actual =  collectionsController.deleteWishlistById(1);
         assertThat((Boolean)actual.getBody()).isEqualTo(true);
     }
 
     @Test
     public void deleteWishlistById_negative(){
-        ResponseEntity actual =  collectionsController.deleteWishlistById(1);
+        ResponseEntity<?> actual =  collectionsController.deleteWishlistById(1);
         assertThat((Boolean)actual.getBody()).isEqualTo(false);
     }
 
     @Test
-    public void deleteDeckById_positive() throws UserNotFoundException {
+    public void deleteDeckById_positive() {
         when(deckService.deleteDeckById(1)).thenReturn(true);
-        ResponseEntity actual =  collectionsController.deleteDeck(1);
+        ResponseEntity<?> actual =  collectionsController.deleteDeck(1);
         assertThat((Boolean)actual.getBody()).isEqualTo(true);
     }
 
     @Test
     public void deleteDeckById_negative(){
-        ResponseEntity actual =  collectionsController.deleteDeck(1);
+        ResponseEntity<?> actual =  collectionsController.deleteDeck(1);
         assertThat((Boolean)actual.getBody()).isEqualTo(false);
     }
 /*
@@ -220,7 +213,7 @@ public class CollectionControllerTest {
     }*/
 
     @Test
-    public void editWishlistById_positive() throws UserNotFoundException, CollectionDoesNotExistException, CardAmountDoesNotExistException {
+    public void editWishlistById_positive() throws UserNotFoundException, CollectionDoesNotExistException {
         when(wishListService.editWishlist(wishlist)).thenReturn(wishlist);
 
         Wishlist editedWishlist = (Wishlist) collectionsController.editWishlistById(wishlist).getBody();
@@ -235,6 +228,15 @@ public class CollectionControllerTest {
         Deck editedDeck = (Deck) collectionsController.editDeck(deck).getBody();
 
         assertThat(editedDeck).isEqualTo(deck);
+    }
+
+    @Test
+    public void editInventory_positive() throws UserNotFoundException, CollectionDoesNotExistException {
+        when(inventoryService.editInventory(inventory)).thenReturn(inventory);
+
+        Inventory editedInventory = (Inventory) collectionsController.editInventory(inventory).getBody();
+
+        assertThat(editedInventory).isEqualTo(inventory);
     }
 
     /*@Test
