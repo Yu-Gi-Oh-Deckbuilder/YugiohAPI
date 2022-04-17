@@ -19,3 +19,24 @@ export const selectCardByName = (name: string) =>
 
   export const selectCardByIdMap = (cardId: number) =>
   createSelector(selectCardEntities, cards=> cards[cardId]);
+export const selectFilteredCards = (filter: string | number) =>
+  createSelector(selectAllCards, cards =>
+    cards.filter(c => c.archetype?.includes(filter as string) || c.type.includes(filter as string)
+      || c.atk == (filter as number) || c.attribute?.includes(filter as string)
+      || c.def == (filter as number) || c.desc.includes(filter as string)
+      || c.id == (filter as number) || c.level == (filter as number)
+      || c.name.includes(filter as string) || c.race.includes(filter as string))
+  )
+
+export const selectPaginatedCards = (start: number, end: number) =>
+  createSelector(selectAllCards, cards => cards.slice(start, end));
+
+export const selectFilteredAndPaginatedCards = (filter: string | number, start: number, end: number) => createSelector(
+  selectFilteredCards(filter),
+  cards => cards.slice(start, end)
+);
+
+export const selectFilteredTotal = (filter: string | number) => createSelector(
+  selectFilteredCards(filter),
+  cards => cards.length
+);

@@ -10,6 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatDialogModule } from '@angular/material/dialog'
 import { MatInputModule } from '@angular/material/input'
 import {MatTableModule} from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator'
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -26,6 +27,11 @@ import { CardEffects } from './shared/service/card/state';
 import { WishlistsComponent } from './wishlists/wishlists.component';
 import { WishlistDetailComponent } from './wishlist-detail/wishlist-detail.component';
 import { WishlistsActions, WishlistsEffects } from './shared/service/wishlist/state';
+import { GalleryComponent } from './gallery/gallery.component';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { LayoutModule } from '@angular/cdk/layout';
 
 @NgModule({
   declarations: [
@@ -34,6 +40,7 @@ import { WishlistsActions, WishlistsEffects } from './shared/service/wishlist/st
     HomepageComponent,
     WishlistsComponent,
     WishlistDetailComponent
+    GalleryComponent
   ],
   imports: [
     BrowserModule,
@@ -49,13 +56,18 @@ import { WishlistsActions, WishlistsEffects } from './shared/service/wishlist/st
     MatDialogModule,
     MatInputModule,
     MatTableModule,
+    MatPaginatorModule,
     StoreModule.forRoot(reducers, {}),
     EffectsModule.forRoot([
       AuthEffects.AuthEffects,
       CardEffects.CardEffects,
       WishlistsEffects.WishlistsEffects,
     ]),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    MatGridListModule,
+    MatMenuModule,
+    MatButtonModule,
+    LayoutModule
   ],
   providers: [],
   bootstrap: [AppComponent]
