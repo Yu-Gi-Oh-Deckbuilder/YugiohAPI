@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
 import { Card } from '../shared/model/card.model';
 import { CardService } from '../shared/service/card/card.service';
@@ -9,14 +9,19 @@ import { CardService } from '../shared/service/card/card.service';
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.scss']
 })
-export class GalleryComponent {
+export class GalleryComponent implements AfterViewInit {
   cards!: Observable<Card[]>;
   start = 0;
   end = 50;
   length!: Observable<number>;
   filter!: string | number;
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
   constructor(private cardService: CardService) {
     this.init();
+  }
+  ngAfterViewInit(): void {
+    // empty body
   }
 
   OnPageChange(event: PageEvent) {
@@ -33,6 +38,7 @@ export class GalleryComponent {
     const value = (event.target as HTMLInputElement).value;
     this.filter = value;
     this.setFilter();
+    this.paginator.firstPage();
   }
 
   init() {

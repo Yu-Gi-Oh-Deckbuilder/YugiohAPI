@@ -5,7 +5,8 @@
 </div>
 
 <div class="center">
-  <mat-paginator [length]="length | async"
+  <mat-paginator #paginator
+    [length]="length | async"
     (page)="OnPageChange($event)">
   </mat-paginator>
 </div>
