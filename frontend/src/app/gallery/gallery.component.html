@@ -13,7 +13,7 @@
 <div class="grid-container">
   <mat-grid-list cols="5" rowHeight="650px">
     <mat-grid-tile *ngFor="let card of cards | async">
-      <div><img mat-card-image [src]="card.card_images[0].image_url"></div>
+      <div><img mat-card-image [src]="card.card_images[0].image_url" [alt]="card.name"></div>
     </mat-grid-tile>
   </mat-grid-list>
 </div>
