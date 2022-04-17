@@ -39,7 +39,7 @@ import { LayoutModule } from '@angular/cdk/layout';
     LoginDialog,
     HomepageComponent,
     WishlistsComponent,
-    WishlistDetailComponent
+    WishlistDetailComponent,
     GalleryComponent
   ],
   imports: [
