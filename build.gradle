@@ -48,7 +48,7 @@ sonarqube {
 		property "sonar.host.url", "https://sonarcloud.io"
 		property "sonar.coverage.jacoco.xmlReportPath", "$buildDir/jacoco/test/jacocoTestReport.xml"
 		property "sonar.coverage.exclusions", "**/com/revature/main/model/*, **/com/revature/main/dao/*, **/com/revature/main/exceptions/*, " +
-				"**/com/revature/main/dto/*, **/com/revature/main/util/*, **/com/revature/main/aspect/*, **/com.revature/main/service/JWTService, " +
+				"**/com/revature/main/dto/*, **/com/revature/main/util/*, **/com/revature/main/aspect/*, **/com/revature/main/service/JWTService, " +
 				"**/com/revature/main/service/EntityService, **/com/revature/main/service/BanListService"
 	}
 }
