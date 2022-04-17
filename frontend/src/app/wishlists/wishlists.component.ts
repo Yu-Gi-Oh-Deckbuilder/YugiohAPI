@@ -3,6 +3,8 @@ import { User } from '../shared/model/user.model';
 import { Wishlist } from '../shared/model/wishlist.model';
 import { WishlistService } from '../shared/service/wishlist/wishlist.service';
 import { Router } from "@angular/router";
+import { AuthService } from '../shared/service/auth/auth.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-wishlists',
@@ -11,27 +13,44 @@ import { Router } from "@angular/router";
 })
 export class WishlistsComponent implements OnInit {
 
-  wishlists: Wishlist[] = [];
-  owner?: User;
+  wishlists$:Observable<Wishlist[]>;
+  //wishlists: Wishlist[] = [];
+  owner!: User;
   displayedColumns: string[] = ['name','cards', 'sharedUsers'];
   dataSource:  Wishlist[] = [];
-  constructor(private wishlistService: WishlistService,private router: Router) { }
+  numOfCards:number=0;
+  constructor(private wishlistService: WishlistService,
+    private router: Router,
+    private authService: AuthService) { 
+      this.getUser();
+      this.wishlistService.getUsersWishlists(this.owner.id);
+      this.wishlists$ = this.wishlistService.selectWishlists();
+    }
 
   ngOnInit(): void {
-    this.getWishlistsByUserId(2);
+    this.wishlists$
+    .subscribe(
+      { 
+        next:wishlists=>{
+          this.dataSource= wishlists;
+        },
+        error:err=>{console.log(err)}
+      }
+    )
+  }
+
+  getUser(){
+    this.authService.getUser()
+    .subscribe(
+      {
+        next:user => this.owner=user!,
+        error:err=>console.log(err)
+      }
+    )
   }
 
   getWishlistsByUserId(userId:number){
-    this.wishlistService.getWishlistsByUserId(userId)
-    .subscribe(wishlists=>{
-      wishlists.forEach(wishlist=>{
-        this.wishlists.push(wishlist);
-      });
-
-      this.owner = wishlists[0].owner;
-      this.dataSource = this.wishlists;
-      console.log(wishlists);
-    })
+    this.wishlistService.getUsersWishlists(userId);
   }
 
   getWishlistById(wishlist:Wishlist){

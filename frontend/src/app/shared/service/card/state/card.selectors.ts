@@ -12,7 +12,10 @@ export const {
 } = adapter.getSelectors(getCardState);
 
 export const selectCardById = (cardId: number) =>
-  createSelector(selectAllCards, cards => cards.filter(c => c.id == cardId));
+  createSelector(selectAllCards, cards => cards.find(c => c.id == cardId));
 
 export const selectCardByName = (name: string) =>
   createSelector(selectAllCards, cards => cards.filter(c => c.name == name));
+
+  export const selectCardByIdMap = (cardId: number) =>
+  createSelector(selectCardEntities, cards=> cards[cardId]);

@@ -6,5 +6,6 @@ export interface Wishlist{
     cards:CardAmount[];
     owner:User;
     name:string;
-    shareUsers:User[];
+    sharedUsers:User[];
+    totalCards:number;
 }

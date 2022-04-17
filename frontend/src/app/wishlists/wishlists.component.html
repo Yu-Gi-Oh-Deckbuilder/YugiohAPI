@@ -9,8 +9,8 @@
     </ng-container>
 
     <ng-container matColumnDef="cards">
-        <th mat-header-cell *matHeaderCellDef> # of Unique Cards </th>
-        <td mat-cell *matCellDef="let wishlist"> {{wishlist.cards.length}} </td>
+        <th mat-header-cell *matHeaderCellDef> # of Cards </th>
+        <td mat-cell *matCellDef="let wishlist"> {{wishlist.totalCards}} </td>
     </ng-container>
 
     <ng-container matColumnDef="sharedUsers">

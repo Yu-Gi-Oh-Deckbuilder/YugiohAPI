@@ -23,16 +23,17 @@ import { AuthEffects } from './shared/service/auth/state/';
 import { reducers } from './app.state';
 import { HomepageComponent } from './homepage/homepage.component';
 import { CardEffects } from './shared/service/card/state';
-import { WishlistComponent } from './wishlist/wishlist.component';
 import { WishlistsComponent } from './wishlists/wishlists.component';
+import { WishlistDetailComponent } from './wishlist-detail/wishlist-detail.component';
+import { WishlistsActions, WishlistsEffects } from './shared/service/wishlist/state';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginDialog,
     HomepageComponent,
-    WishlistComponent,
-    WishlistsComponent
+    WishlistsComponent,
+    WishlistDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -52,6 +53,7 @@ import { WishlistsComponent } from './wishlists/wishlists.component';
     EffectsModule.forRoot([
       AuthEffects.AuthEffects,
       CardEffects.CardEffects,
+      WishlistsEffects.WishlistsEffects,
     ]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
   ],
