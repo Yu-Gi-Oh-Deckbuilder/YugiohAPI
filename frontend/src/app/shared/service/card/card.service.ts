@@ -36,6 +36,8 @@ export class CardService {
 
   selectCardByIdMap(cardId: number) {
     return this.store.select(CardSelectors.selectCardByIdMap(cardId));
+  }
+  
   selectAllCards() {
     return this.store.select(CardSelectors.selectAllCards);
   }
