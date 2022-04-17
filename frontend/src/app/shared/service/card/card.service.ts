@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AppState } from 'src/app/app.state';
 import { ApiData } from '../../model/api-data.model';
-import { CardActions } from './state';
+import { CardActions, CardSelectors } from './state';
 
 @Injectable({
   providedIn: 'root'
@@ -24,5 +24,13 @@ export class CardService {
 
   getAllCardsFromApi():Observable<ApiData>{
     return this.http.get<any>(this.yugiohApiUrl);
+  }
+
+  selectCardByName(name: string) {
+    return this.store.select(CardSelectors.selectCardByName(name));
+  }
+
+  selectCardById(cardId: number) {
+    return this.store.select(CardSelectors.selectCardById(cardId));
   }
 }
