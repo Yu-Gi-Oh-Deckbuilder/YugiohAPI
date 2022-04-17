@@ -1,0 +1,19 @@
+<div class="center">
+  <mat-form-field>
+    <input matInput type="text" (keyup)="OnKeyUp($event)" placeholder="Search">
+  </mat-form-field>
+</div>
+
+<div class="center">
+  <mat-paginator [length]="length | async"
+    (page)="OnPageChange($event)">
+  </mat-paginator>
+</div>
+
+<div class="grid-container">
+  <mat-grid-list cols="5" rowHeight="650px">
+    <mat-grid-tile *ngFor="let card of cards | async">
+      <div><img mat-card-image [src]="card.card_images[0].image_url"></div>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
