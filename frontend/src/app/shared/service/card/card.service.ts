@@ -33,4 +33,28 @@ export class CardService {
   selectCardById(cardId: number) {
     return this.store.select(CardSelectors.selectCardById(cardId));
   }
+
+  selectAllCards() {
+    return this.store.select(CardSelectors.selectAllCards);
+  }
+
+  selectPaginatedCards(start:number, end: number) {
+    return this.store.select(CardSelectors.selectPaginatedCards(start, end));
+  }
+
+  selectTotalCards() {
+    return this.store.select(CardSelectors.selectTotalCards);
+  }
+
+  selectFilteredCards(filter: string | number) {
+    return this.store.select(CardSelectors.selectFilteredCards(filter));
+  }
+
+  selectFilteredAndPaginatedCards(filter: string | number, start: number, end: number) {
+    return this.store.select(CardSelectors.selectFilteredAndPaginatedCards(filter, start, end));
+  }
+
+  selectFilteredTotal(filter: string | number) {
+    return this.store.select(CardSelectors.selectFilteredTotal(filter));
+  }
 }
