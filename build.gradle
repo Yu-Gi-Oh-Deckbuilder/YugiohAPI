@@ -4,6 +4,7 @@ plugins {
 	id 'java'
 	id 'application'
 	id "org.sonarqube" version "3.3"
+	id 'jacoco'
 }
 
 group = 'com.revature'
@@ -24,11 +25,30 @@ repositories {
 	mavenCentral()
 }
 
+jacoco {
+	toolVersion = "0.8.7"
+	reportsDirectory = file("$buildDir/jacoco")
+}
+
+test {
+	finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		xml.enabled = true
+	}
+}
+
 sonarqube {
 	properties {
 		property "sonar.projectKey", "Yu-Gi-Oh-Deckbuilder_YugiohAPI"
 		property "sonar.organization", "yu-gi-oh-deckbuilder"
 		property "sonar.host.url", "https://sonarcloud.io"
+		property "sonar.coverage.jacoco.xmlReportPath", "$buildDir/jacoco/test/jacocoTestReport.xml"
+		property "sonar.coverage.exclusions", "**/com/revature/main/model/*, **/com/revature/main/dao/*, **/com/revature/main/exceptions/*, " +
+				"**/com/revature/main/dto/*, **/com/revature/main/util/*, **/com/revature/main/aspect/*"
 	}
 }
 
