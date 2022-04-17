@@ -1,4 +1,4 @@
-import { createFeatureSelector } from '@ngrx/store';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { adapter } from './card.adapters';
 import * as fromState from './card.state';
 
@@ -9,4 +9,10 @@ export const {
   selectEntities: selectCardEntities,
   selectAll: selectAllCards,
   selectTotal: selectTotalCards,
-} = adapter.getSelectors();
+} = adapter.getSelectors(getCardState);
+
+export const selectCardById = (cardId: number) =>
+  createSelector(selectAllCards, cards => cards.filter(c => c.id == cardId));
+
+export const selectCardByName = (name: string) =>
+  createSelector(selectAllCards, cards => cards.filter(c => c.name == name));
