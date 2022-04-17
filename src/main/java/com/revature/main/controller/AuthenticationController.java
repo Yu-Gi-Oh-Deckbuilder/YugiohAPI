@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Profile("prod")
 @RestController
-@CrossOrigin
+@CrossOrigin(originPatterns = "*", exposedHeaders = "*", allowedHeaders = "*")
 public class AuthenticationController {
 
     @Autowired
@@ -34,7 +34,7 @@ public class AuthenticationController {
             String jwt = jwtService.createJwt(user);
 
             HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("token", jwt);
+            responseHeaders.set("Token", jwt);
 
             return ResponseEntity.ok().headers(responseHeaders).body(user);
 
