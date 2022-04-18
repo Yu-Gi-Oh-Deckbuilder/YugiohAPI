@@ -30,8 +30,8 @@ export class WishlistService {
   }
   
   //TODO: Get wishlist by wishlistId 
-  getWishlistsById(wishlistId:number):Observable<Wishlist>{
-    return this.http.get<Wishlist>(this.wishlistsUrl+`/${wishlistId}`);
+  getWishlistById(wishlistId:number):Observable<Wishlist|undefined>{
+    return this.store.select(WishlistsSelectors.selectWishlistById(wishlistId));
   }
 
   // getWishlist(wishlistId:number){
@@ -39,6 +39,9 @@ export class WishlistService {
   // }
 
   //TODO: Create wishlist 
-  //TODO: Edit wishlist  
+  //TODO: Edit wishlist
+  editWishlist(wishlist:Wishlist){
+    return this.http.patch<Wishlist>('http://localhost:9011/collections/wishlists',wishlist)
+  }  
   //TODO: Delete wishlist 
 }

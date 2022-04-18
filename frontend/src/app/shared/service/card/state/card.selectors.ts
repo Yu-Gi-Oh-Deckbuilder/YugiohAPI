@@ -15,11 +15,12 @@ export const selectCardById = (cardId: number) =>
   createSelector(selectAllCards, cards => cards.find(c => c.id == cardId));
 
 export const selectCardByName = (name: string) =>
-  createSelector(selectAllCards, cards => cards.filter(c => c.name == name));
+  createSelector(selectAllCards, cards => cards.find(c => c.name == name));
 
   export const selectCardByIdMap = (cardId: number) =>
   createSelector(selectCardEntities, cards=> cards[cardId]);
-export const selectFilteredCards = (filter: string | number) =>
+
+  export const selectFilteredCards = (filter: string | number) =>
   createSelector(selectAllCards, cards =>
     cards.filter(c => c.archetype?.includes(filter as string) || c.type.includes(filter as string)
       || c.atk == (filter as number) || c.attribute?.includes(filter as string)
@@ -39,4 +40,16 @@ export const selectFilteredAndPaginatedCards = (filter: string | number, start: 
 export const selectFilteredTotal = (filter: string | number) => createSelector(
   selectFilteredCards(filter),
   cards => cards.length
+);
+
+export const selectAllCardNames = createSelector(
+  selectAllCards,
+  cards => cards.map(card=>card.name)
+);
+
+export const selectIdFromCardName = (name: string) => createSelector(
+  selectAllCards,
+  cards => cards.find(card => {
+    (card.name == name)
+  })
 );

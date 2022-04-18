@@ -61,4 +61,8 @@ export class CardService {
   selectFilteredTotal(filter: string | number) {
     return this.store.select(CardSelectors.selectFilteredTotal(filter));
   }
+
+  selectAllCardNames(){
+    return this.store.select(CardSelectors.selectAllCardNames);
+  }
 }

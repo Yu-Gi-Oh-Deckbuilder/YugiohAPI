@@ -1,0 +1,14 @@
+<h4>Add a card to your Wishlist</h4>
+<mat-form-field appearance="fill">
+  <mat-label>Select Card To Add</mat-label>
+  <mat-select>
+    <mat-option *ngFor="let card of allCards" [value]="card.id" (onSelectionChange)="setCard(card)">
+      {{card.name}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="cardToAdd" cdkFocusInitial>Add Cards</button>
+</mat-dialog-actions>

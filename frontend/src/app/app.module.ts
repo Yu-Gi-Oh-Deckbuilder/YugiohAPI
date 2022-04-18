@@ -33,7 +33,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
 import { JwtModule } from '@auth0/angular-jwt';
-
+import { AddCardDialog } from './add-card/add-card';
+import {MatChipsModule} from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSelectModule } from '@angular/material/select';
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,6 +45,7 @@ import { JwtModule } from '@auth0/angular-jwt';
     WishlistsComponent,
     WishlistDetailComponent,
     GalleryComponent,
+    AddCardDialog,
   ],
   imports: [
     BrowserModule,
@@ -58,6 +62,9 @@ import { JwtModule } from '@auth0/angular-jwt';
     MatInputModule,
     MatTableModule,
     MatPaginatorModule,
+    MatChipsModule,
+    MatAutocompleteModule,
+    MatSelectModule,
     StoreModule.forRoot(reducers, {}),
     EffectsModule.forRoot([
       AuthEffects.AuthEffects,
