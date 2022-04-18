@@ -39,6 +39,9 @@ export class WishlistService {
   // }
 
   //TODO: Create wishlist 
-  //TODO: Edit wishlist  
+  //TODO: Edit wishlist
+  editWishlist(wishlist:Wishlist){
+    return this.http.patch<Wishlist>('http://localhost:9011/collections/wishlists',wishlist)
+  }  
   //TODO: Delete wishlist 
 }
