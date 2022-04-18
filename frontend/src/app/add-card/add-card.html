@@ -1,0 +1,52 @@
+<!-- <h2 mat-dialog-title>Add A Card to {{wishlist.name}} </h2>
+<mat-dialog-content class="mat-typography">
+    
+    
+    <mat-form-field class="example-chip-list" appearance="fill">
+        <mat-label>Add Cards</mat-label>
+        <mat-chip-list #chipList aria-label="Card selection">
+        <mat-chip
+            *ngFor="let card of cards"
+            (removed)="remove(card)">
+            {{card}}
+            <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+            </button>
+        </mat-chip>
+        <input
+            placeholder="New Card..."
+            #cardInput
+            [formControl]="cardCtrl"
+            [matAutocomplete]="auto"
+            [matChipInputFor]="chipList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="add($event)">
+        </mat-chip-list>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+          <mat-option *ngFor="let card of filteredCards | async" [value]="card">
+            {{card}}
+        </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="cards" cdkFocusInitial>Add Cards</button>
+</mat-dialog-actions> -->
+
+<h4>Add a card to your Wishlist</h4>
+<mat-form-field appearance="fill">
+  <mat-label>Select Card To Add</mat-label>
+  <mat-select>
+    <mat-option *ngFor="let card of allCards" [value]="card.id" (onSelectionChange)="setCard(card)">
+      {{card.name}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="cardToAdd" cdkFocusInitial>Add Cards</button>
+</mat-dialog-actions>
