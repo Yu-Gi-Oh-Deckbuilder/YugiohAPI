@@ -63,12 +63,35 @@ export class WishlistDetailComponent implements OnInit {
     dialogRef.afterClosed().subscribe(
       {
         next:card => {
+
+
           this.cardToAdd = card;
-        
-          // console.log('cardtoBeAdded');
-          // console.log(this.cardToAdd);
-          // this.wishlist.cards.push();
-          // this.wishlistService.editWishlist(this.wishlist);
+          
+          //use strings to find cards
+          // cards.forEach((cardName: string)=>{
+          //   this.cardToAdd = this.cardService.selectCardByName(cardName)
+          //   this.cardToAdd.subscribe(
+          //     {
+          //       next:card=>{
+          //         if(card){
+          //           console.log(this.cardAmountToAdd);
+          //           this.cardAmountToAdd.cardId=card.id;
+          //           this.cardAmountToAdd.cardAmount=1;
+          //           this.cardsToAdd.push(this.cardAmountToAdd);
+          //         }
+          //       }
+          //     }
+          //   )            
+          // })
+          //make http call to save card amounts for wishlists
+          // this.cardsToAdd.forEach(cardAmount=>{
+          // this.wishlist.cards.push(cardAmount);
+          // })
+          //this.wishlistService.editWishlist(this.wishlist);
+          console.log('cardtoBeAdded');
+          console.log(this.cardToAdd);
+          this.wishlist.cards.push(new CardAmount(0,this.cardToAdd.id,1));
+          this.wishlistService.editWishlist(this.wishlist);
           }
           
       }
