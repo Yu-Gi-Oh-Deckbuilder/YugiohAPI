@@ -64,7 +64,6 @@ export class WishlistDetailComponent implements OnInit {
       {
         next:card => {
 
-
           this.cardToAdd = card;
           
           //use strings to find cards
