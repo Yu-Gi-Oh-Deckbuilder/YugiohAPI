@@ -47,9 +47,10 @@ export const selectAllCardNames = createSelector(
   cards => cards.map(card=>card.name)
 );
 
-export const selectIdFromCardName = (name: string) => createSelector(
+export const selectIdsFromCardNames = (names: string[]) => createSelector(
   selectAllCards,
-  cards => cards.find(card => {
-    (card.name == name)
-  })
+  cards => {
+    const cardNames = cards.filter(card => names.includes(card.name));
+    return cardNames.map(card => card.id);
+  }
 );
