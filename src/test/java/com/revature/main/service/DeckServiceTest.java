@@ -105,7 +105,6 @@ public class DeckServiceTest {
     @Test
     public void getDeckById_positive() throws UserNotFoundException, CollectionDoesNotExistException {
         when(deckRepository.findById(1)).thenReturn(Optional.of(deck));
-        when(deckRepository.existsById(1)).thenReturn(true);
         when(userRepository.existsById(1)).thenReturn(true);
         Deck actual = deckService.getDeckById(1,user.getId());
 
@@ -133,7 +132,6 @@ public class DeckServiceTest {
     public void editDeck_positive() throws UserNotFoundException, CollectionDoesNotExistException {
 
         when(deckRepository.findById(1)).thenReturn(Optional.of(deck));
-        when(deckRepository.existsById(deck.getId())).thenReturn(true);
         when(userRepository.existsById(deck.getOwner().getId())).thenReturn(true);
         Deck expected = new Deck();
         expected.setCards(deck.getCards());
@@ -148,14 +146,13 @@ public class DeckServiceTest {
     }
 
     @Test public void editDeck_CollectionDoesNotExistException(){
+        when(userRepository.existsById(deckDto.getOwner().getId())).thenReturn(true);
         Assertions.assertThrows(CollectionDoesNotExistException.class,()->{
             deckService.editDeck(deckDto);
         });
     }
 
     @Test public void editDeck_UserNotFoundException(){
-        when(deckRepository.existsById(deck.getId())).thenReturn(true);
-
         Assertions.assertThrows(UserNotFoundException.class,()->{
             deckService.editDeck(deckDto);
         });

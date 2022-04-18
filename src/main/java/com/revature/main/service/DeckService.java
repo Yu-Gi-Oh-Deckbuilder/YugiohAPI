@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DeckService extends EntityService{
@@ -33,29 +34,26 @@ public class DeckService extends EntityService{
     public Deck getDeckById(int id, int userId) throws UserNotFoundException, CollectionDoesNotExistException {
         checkIfUserExists(userId);
 
-        if(!deckRepository.existsById(id)){
-            throw new CollectionDoesNotExistException("Deck does not exist");
-        }
-
-        return deckRepository.findById(id).get();
+        Optional<Deck> deck = deckRepository.findById(id);
+        if (deck.isPresent()) return deck.get();
+        throw new CollectionDoesNotExistException("Deck does not exist");
     }
 
 
     @Transactional
     public Deck editDeck(DeckDto target) throws UserNotFoundException, CollectionDoesNotExistException {
-        if(!deckRepository.existsById(target.getId())){
-            throw new CollectionDoesNotExistException("Deck with id "+target.getId()+" does not exist");
-        }
-
         if(!userRepository.existsById(target.getOwner().getId())){
             throw new UserNotFoundException("User with id "+target.getOwner().getId()+ " does not exist");
         }
-
-        Deck source = deckRepository.findById(target.getId()).get();
-        source.setCards(target.getCards());
-        source.setBanList(target.getBanList());
-        source.setTotalCards(CollectionUtility.calculateTotal(target.getCards()));
-        return deckRepository.saveAndFlush(source);
+        Optional<Deck> deck = deckRepository.findById(target.getId());
+        if (deck.isPresent()) {
+            Deck source = deck.get();
+            source.setCards(target.getCards());
+            source.setBanList(target.getBanList());
+            source.setTotalCards(CollectionUtility.calculateTotal(target.getCards()));
+            return deckRepository.saveAndFlush(source);
+        }
+        throw new CollectionDoesNotExistException("Deck with id "+target.getId()+" does not exist");
     }
 
     @Transactional
