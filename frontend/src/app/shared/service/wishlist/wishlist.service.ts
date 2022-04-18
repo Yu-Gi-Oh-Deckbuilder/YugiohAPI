@@ -30,8 +30,8 @@ export class WishlistService {
   }
   
   //TODO: Get wishlist by wishlistId 
-  getWishlistsById(wishlistId:number):Observable<Wishlist>{
-    return this.http.get<Wishlist>(this.wishlistsUrl+`/${wishlistId}`);
+  getWishlistById(wishlistId:number):Observable<Wishlist|undefined>{
+    return this.store.select(WishlistsSelectors.selectWishlistById(wishlistId));
   }
 
   // getWishlist(wishlistId:number){

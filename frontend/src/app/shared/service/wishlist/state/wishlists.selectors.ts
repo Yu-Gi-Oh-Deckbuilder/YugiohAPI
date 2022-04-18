@@ -17,3 +17,7 @@ export const selectWishlists = createSelector(
   selectWishlistState,
   state => state.wishlists
 );
+
+export const selectWishlistById = (wishlistId:number) =>createSelector(
+  selectWishlists,
+  wishlists => wishlists.find(wishlist => wishlist.id == wishlistId))

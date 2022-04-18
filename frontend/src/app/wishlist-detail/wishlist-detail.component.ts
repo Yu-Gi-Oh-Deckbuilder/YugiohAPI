@@ -34,7 +34,6 @@ export class WishlistDetailComponent implements OnInit {
     private dialog: MatDialog) { 
       const id = Number(this.route.snapshot.paramMap.get('id'));
       this.wishlist$ = this.wishlistService.getWishlistById(id);
-      console.log(this.wishlist$);
     }
 
   ngOnInit(): void {
@@ -65,31 +64,8 @@ export class WishlistDetailComponent implements OnInit {
         next:card => {
 
           this.cardToAdd = card;
-          
-          //use strings to find cards
-          // cards.forEach((cardName: string)=>{
-          //   this.cardToAdd = this.cardService.selectCardByName(cardName)
-          //   this.cardToAdd.subscribe(
-          //     {
-          //       next:card=>{
-          //         if(card){
-          //           console.log(this.cardAmountToAdd);
-          //           this.cardAmountToAdd.cardId=card.id;
-          //           this.cardAmountToAdd.cardAmount=1;
-          //           this.cardsToAdd.push(this.cardAmountToAdd);
-          //         }
-          //       }
-          //     }
-          //   )            
-          // })
-          //make http call to save card amounts for wishlists
-          // this.cardsToAdd.forEach(cardAmount=>{
-          // this.wishlist.cards.push(cardAmount);
-          // })
-          //this.wishlistService.editWishlist(this.wishlist);
-          console.log('cardtoBeAdded');
-          console.log(this.cardToAdd);
-          this.wishlist.cards.push(new CardAmount(0,this.cardToAdd.id,1));
+          // Object is not extendible (cannot add propperties)
+          //this.wishlist.cards.push({id:0,cardId:this.cardToAdd.id,cardAmount:1});
           this.wishlistService.editWishlist(this.wishlist);
           }
           

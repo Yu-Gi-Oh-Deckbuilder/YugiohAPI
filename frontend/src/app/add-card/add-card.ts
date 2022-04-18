@@ -36,13 +36,7 @@ export class AddCardDialog {
     private wishlistService:WishlistService,
     private cardService:CardService,
     ){
-        console.log('Constructor ');        
         this.wishlist = data;
-
-        // this.filteredCards = this.cardCtrl.valueChanges.pipe(
-        //     startWith(null),
-        //     map((card: string | null) => (card ? this._filter(card) : this.allCards.slice())),
-        // );
 
         this.cardsFromApi= this.cardService.selectAllCards();
 
@@ -58,13 +52,12 @@ export class AddCardDialog {
     }
 
     ngOnInit(): void {
-        console.log('OnInIt');
     }
 
     setCard(card:Card){
         this.cardToAdd = card;
-        console.log(this.cardToAdd);
     }
+
     onCancel() {
         this.dialogRef.close();
     }
@@ -75,7 +68,6 @@ export class AddCardDialog {
         // Add our card
         if (value) {
             this.cards.push(value);
-            console.log(this.cards);
         }
     
         // Clear the input value
@@ -96,12 +88,5 @@ export class AddCardDialog {
         this.cards.push(event.option.viewValue);
         this.cardInput.nativeElement.value = '';
         this.cardCtrl.setValue(null);
-        console.log(this.cards);
     }
-
-    // private _filter(cardFiltered: string): string[] {    
-    //     const filterValue = cardFiltered.toLowerCase();
-
-    //     return this.allCards.filter(card => card.toLowerCase().includes(filterValue));
-    // }
 }
