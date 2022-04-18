@@ -21,15 +21,13 @@ public class DeckService extends EntityService{
 
 
     public List<Deck> getAllDecks(){
-        List<Deck> decks = deckRepository.findAll();
 
-        return decks;
+        return deckRepository.findAll();
     }
 
     public List<Deck> getAllDecksByUserId(int id) throws UserNotFoundException, CollectionDoesNotExistException {
         checkIfUserExists(id);
-        List<Deck> decks = deckRepository.findAllByUserId(id);
-        return decks;
+        return deckRepository.findAllByUserId(id);
     }
 
     public Deck getDeckById(int id, int userId) throws UserNotFoundException, CollectionDoesNotExistException {
@@ -39,9 +37,7 @@ public class DeckService extends EntityService{
             throw new CollectionDoesNotExistException("Deck does not exist");
         }
 
-       Deck deck = deckRepository.findById(id).get();
-
-        return deck;
+        return deckRepository.findById(id).get();
     }
 
 
@@ -75,8 +71,13 @@ public class DeckService extends EntityService{
     public Deck createDeck(Deck deck) throws UserNotFoundException {
         checkIfUserExists(deck.getOwner().getId());
 
-        deck.setTotalCards(CollectionUtility.calculateTotal(deck.getCards()));
-        deckRepository.saveAndFlush(deck);
+        Deck newDeck = new Deck();
+        newDeck.setBanList(deck.getBanList());
+        newDeck.setCards(deck.getCards());
+        newDeck.setName(deck.getName());
+        newDeck.setOwner(deck.getOwner());
+        newDeck.setTotalCards(CollectionUtility.calculateTotal(deck.getCards()));
+        deckRepository.saveAndFlush(newDeck);
 
         return deck;
     }

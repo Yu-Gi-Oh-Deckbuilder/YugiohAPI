@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable("id") int id) throws UserNotFoundException {
+    public ResponseEntity<?> getUserById(@PathVariable("id") int id) {
         try{
             User user = userService.getUserById(id);
             return ResponseEntity.ok().body(user);
@@ -61,10 +61,10 @@ public class UserController {
     @DeleteMapping("/{id}")
     public boolean deleteUserById(@PathVariable("id") int id) throws UserNotFoundException {
         boolean result = userService.deleteUserById(id);
-        if (result == false){
+        if (!result){
             throw new InvalidParameterException("The User attempted to be deleted doesn't exist");
         }
-        return result;
+        return true;
     }
 
     @PostMapping

@@ -70,68 +70,63 @@ public class UserService extends EntityService{
     public User createUser(User user){
 
         validateUserData(user);
-
+        User newUser = new User();
+        newUser.setUsername(user.getUsername());
+        newUser.setPassword(user.getPassword());
+        newUser.setFirstName(user.getFirstName());
+        newUser.setLastName(user.getLastName());
+        newUser.setEmail(user.getEmail());
+        newUser.setUserRole(user.getUserRole());
         // TODO add inventory for the user
 
         //flushing will save the object to the database
-        return userRepository.saveAndFlush(user);
+        return userRepository.saveAndFlush(newUser);
     }
 
     public void validateUserData(User user){
-        try{
-            user.setUsername(user.getUsername().trim());
-            user.setFirstName(user.getFirstName().trim());
-            user.setLastName(user.getLastName().trim());
+        user.setUsername(user.getUsername().trim());
+        user.setFirstName(user.getFirstName().trim());
+        user.setLastName(user.getLastName().trim());
 
-            if (user.getPassword().length() > 50){
-                throw new IllegalArgumentException("Your password is too long. Please make it shorter");
-            }
+        if (user.getPassword().length() > 50){
+            throw new IllegalArgumentException("Your password is too long. Please make it shorter");
+        }
 
-            if (!user.getUsername().matches("[a-zA-Z0-9]+")) {
-                throw new IllegalArgumentException("Username must only have alphabetical characters and/or '!_-. Username input was " + user.getUsername());
-            }
+        if (!user.getUsername().matches("[a-zA-Z0-9]+")) {
+            throw new IllegalArgumentException("Username must only have alphabetical characters and/or '!_-. Username input was " + user.getUsername());
+        }
 
-            if(user.getFirstName().contains(" ") || user.getLastName().contains(" ")){
-                throw new IllegalArgumentException("First name and last and cannot be more than 1 string");
-            }
+        if(user.getFirstName().contains(" ") || user.getLastName().contains(" ")){
+            throw new IllegalArgumentException("First name and last and cannot be more than 1 string");
+        }
 
-            if (!user.getFirstName().matches("[a-zA-Z]+")) {
-                throw new IllegalArgumentException("First name must only have alphabetical characters. First name input was " + user.getFirstName());
-            }
+        if (!user.getFirstName().matches("[a-zA-Z]+")) {
+            throw new IllegalArgumentException("First name must only have alphabetical characters. First name input was " + user.getFirstName());
+        }
 
-            if (!user.getLastName().matches("[a-zA-Z]+")) {
-                throw new IllegalArgumentException("Last name must only have alphabetical characters. Last name input was " + user.getLastName());
-            }
+        if (!user.getLastName().matches("[a-zA-Z]+")) {
+            throw new IllegalArgumentException("Last name must only have alphabetical characters. Last name input was " + user.getLastName());
+        }
 
-            if(!user.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z-]+[.]+[a-z]{2,3}$")){
-                throw new IllegalArgumentException("Please ensure that your email is correct,Internationalized domain names are not allowed.");
-            }
-
-        }catch(NullPointerException e){
-            new NullPointerException("Parameter specified as non-null is null");
+        if(!user.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z-]+[.]+[a-z]{2,3}$")){
+            throw new IllegalArgumentException("Please ensure that your email is correct,Internationalized domain names are not allowed.");
         }
     }
 
     public void validateUserData(UserDto userDto){
-        try{
+        userDto.setFirstName(userDto.getFirstName().trim());
+        userDto.setLastName(userDto.getLastName().trim());
 
-            userDto.setFirstName(userDto.getFirstName().trim());
-            userDto.setLastName(userDto.getLastName().trim());
+        if (!userDto.getFirstName().matches("[a-zA-Z]+")) {
+            throw new IllegalArgumentException("First name must only have alphabetical characters. First name input was " + userDto.getFirstName());
+        }
 
-            if (!userDto.getFirstName().matches("[a-zA-Z]+")) {
-                throw new IllegalArgumentException("First name must only have alphabetical characters. First name input was " + userDto.getFirstName());
-            }
+        if (!userDto.getLastName().matches("[a-zA-Z]+")) {
+            throw new IllegalArgumentException("Last name must only have alphabetical characters. Last name input was " + userDto.getLastName());
+        }
 
-            if (!userDto.getLastName().matches("[a-zA-Z]+")) {
-                throw new IllegalArgumentException("Last name must only have alphabetical characters. Last name input was " + userDto.getLastName());
-            }
-
-            if(!userDto.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z-]+[.]+[a-z]{2,3}$")){
-                throw new IllegalArgumentException("Please ensure that your email is correct,Internationalized domain names are not allowed.");
-            }
-
-        }catch(NullPointerException e){
-            new NullPointerException("Parameter specified as non-null is null");
+        if(!userDto.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z-]+[.]+[a-z]{2,3}$")){
+            throw new IllegalArgumentException("Please ensure that your email is correct,Internationalized domain names are not allowed.");
         }
     }
 }

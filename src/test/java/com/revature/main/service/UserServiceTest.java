@@ -61,10 +61,8 @@ public class UserServiceTest {
     }
 
     @Test
-    public void deleteUserById_negative () throws UserNotFoundException {
-        Assertions.assertThrows(UserNotFoundException.class, ()->{
-            userService.deleteUserById(1);
-        });
+    public void deleteUserById_negative () {
+        Assertions.assertThrows(UserNotFoundException.class, ()-> userService.deleteUserById(1));
     }
 
     @Test
@@ -86,9 +84,7 @@ public class UserServiceTest {
     @Test
     public void updateUserAdmin_negative(){
         //null because we don't get to the actual dto
-        Assertions.assertThrows(UserNotFoundException.class,()->{
-            userService.updateUser(new User());
-        });
+        Assertions.assertThrows(UserNotFoundException.class,()-> userService.updateUser(new User()));
     }
     
     @Test
@@ -106,17 +102,15 @@ public class UserServiceTest {
     }
 
     @Test
-    public void updateUser_negative() throws UserNotFoundException {
+    public void updateUser_negative() {
         //null because we don't get to the actual dto
-        Assertions.assertThrows(UserNotFoundException.class,()->{
-            userService.updateUser(new UserDto());
-        });
+        Assertions.assertThrows(UserNotFoundException.class,()-> userService.updateUser(new UserDto()));
     }
 
     @Test
     public void createUser_positive(){
         Role role = new Role(1, "user");
-        User user = new User(2, "test", "password", "test", "test", "test@test.com", role);
+        User user = new User(0, "test", "password", "test", "test", "test@test.com", role);
         when(userRepository.saveAndFlush(user)).thenReturn(user);
         User actual = userService.createUser(user);
         assertThat(actual).isEqualTo(user);
@@ -127,9 +121,7 @@ public class UserServiceTest {
         Role role = new Role(1, "user");
         User user = new User(2, "test", "password", "test123", "test", "test@test.com", role);
 
-        Assertions.assertThrows(IllegalArgumentException.class,()->{
-           userService.createUser(user);
-        });
+        Assertions.assertThrows(IllegalArgumentException.class,()-> userService.createUser(user));
 
     }
 }

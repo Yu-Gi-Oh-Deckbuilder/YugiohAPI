@@ -31,9 +31,7 @@ public class WishlistService extends EntityService{
     public List<Wishlist> getAllWishlistByUserId(int id) throws UserNotFoundException {
        checkIfUserExists(id);
 
-        List<Wishlist> wishlists = wishlistRepository.findAllByUserId(id);
-
-        return wishlists;
+        return wishlistRepository.findAllByUserId(id);
     }
 
     public Wishlist getWishListById(int id, int userId) throws UserNotFoundException, UnAuthorizedException, CollectionDoesNotExistException {
@@ -72,8 +70,7 @@ public class WishlistService extends EntityService{
         source.setTotalCards(CollectionUtility.calculateTotal(target.getCards()));
 
         //flushing will save the object to the database
-        Wishlist wishlist = wishlistRepository.saveAndFlush(source);
-        return wishlist;
+        return wishlistRepository.saveAndFlush(source);
     }
 
     @Transactional
@@ -89,7 +86,12 @@ public class WishlistService extends EntityService{
     public Wishlist createWishlist(Wishlist wishlist) throws UserNotFoundException {
         checkIfUserExists(wishlist.getOwner().getId());
 
-        wishlist.setTotalCards(CollectionUtility.calculateTotal(wishlist.getCards()));
+        Wishlist newWishlist = new Wishlist();
+        newWishlist.setName(wishlist.getName());
+        newWishlist.setCards(wishlist.getCards());
+        newWishlist.setOwner(wishlist.getOwner());
+        newWishlist.setSharedUsers(wishlist.getSharedUsers());
+        newWishlist.setTotalCards(CollectionUtility.calculateTotal(wishlist.getCards()));
         wishlistRepository.save(wishlist);
 
         return wishlist;
