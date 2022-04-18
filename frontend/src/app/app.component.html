@@ -4,7 +4,7 @@
       <mat-icon>home</mat-icon>
     </a>
   </span>
-  <span *ngIf="isAuthenticated | async">
+  <span>
     <a routerLink="/gallery">
       <mat-icon>collections</mat-icon>
     </a>
@@ -12,7 +12,7 @@
   <span *ngIf="(isAuthenticated | async)">
     <a routerLink="/wishlists">
       <p>Wishlists</p>
-    </a>  
+    </a>
   </span>
   <span class="spacer"></span>
   <span *ngIf="!(isAuthenticated | async)">
