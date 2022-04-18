@@ -1,5 +1,7 @@
 package com.revature.main.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.revature.main.dto.UserDto;
 import com.revature.main.exceptions.CardAmountDoesNotExistException;
 import com.revature.main.exceptions.CollectionDoesNotExistException;
 import com.revature.main.exceptions.UnAuthorizedException;
@@ -22,6 +24,7 @@ import java.util.List;
 @CrossOrigin
 public class CollectionController {
 
+    private static final String UNAUTHORIZED = "Unauthorized access. User Id does not match";
     @Autowired
     WishlistService wishlistService;
 
@@ -37,30 +40,8 @@ public class CollectionController {
     @Autowired
     InventoryService inventoryService;
 
-    /*@GetMapping
-    public ResponseEntity<?> getAllWishlists(@RequestParam("id") int id) {
-        try{
-            List<Wishlist> wishLists = wishlistService.getAllWishlistByUserId(id);
-            //List<Deck> deckList = deckService.getAllDecksByUserId(id);
-            //Inventory inventory = inventoryService.getInventoryByUserId(id);
-
-            //List<Wishlist> collectionList = new ArrayList<>();
-
-
-
-            *//*for (Deck deck: deckList) {
-                collectionList.add(deck);
-            }
-
-            collectionList.add(inventory);*//*
-
-            return  ResponseEntity.ok().body(wishLists);
-
-        }catch(UserNotFoundException e){
-            return ResponseEntity.status(400).body(e.getMessage());
-        }
-    }
-*/
+    @Autowired
+    JWTService jwtService;
 
     @GetMapping("/wishlists")
     public ResponseEntity<?> getAllWishlists() {
@@ -81,7 +62,9 @@ public class CollectionController {
     }
 
     @GetMapping("/users/{userId}/wishlists")
-    public ResponseEntity<?> getAllWishlistsByUserId(@PathVariable("userId") int userId) {
+    public ResponseEntity<?> getAllWishlistsByUserId(
+            @PathVariable("userId") int userId, @RequestHeader("Authorization") String token) throws JsonProcessingException {
+        if(!returnFalseIfUserIdMismatch(userId, token)) ResponseEntity.status(401).body(UNAUTHORIZED);
         try{
             List<Wishlist> wishLists = wishlistService.getAllWishlistByUserId(userId);
             return  ResponseEntity.ok().body(wishLists);
@@ -91,20 +74,24 @@ public class CollectionController {
     }
 
     @GetMapping("/users/{userId}/decks")
-    public ResponseEntity<?> getAllDecksByUserId(@PathVariable("userId") int userId) {
+    public ResponseEntity<?> getAllDecksByUserId(
+            @PathVariable("userId") int userId, @RequestHeader("Authorization") String token) throws JsonProcessingException {
+        if(!returnFalseIfUserIdMismatch(userId, token)) ResponseEntity.status(401).body(UNAUTHORIZED);
         try{
             List<Deck> decks = deckService.getAllDecksByUserId(userId);
             return  ResponseEntity.ok().body(decks);
-        }catch(UserNotFoundException | CollectionDoesNotExistException | UnAuthorizedException e){
+        }catch(UserNotFoundException | CollectionDoesNotExistException e){
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
 
     @GetMapping("/users/{userId}/inventory")
-    public ResponseEntity<?> getInventoryByUserId(@PathVariable("userId") int id) {
+    public ResponseEntity<?> getInventoryByUserId(
+            @PathVariable("userId") int userId, @RequestHeader("Authorization") String token) throws JsonProcessingException {
+        if(!returnFalseIfUserIdMismatch(userId, token)) ResponseEntity.status(401).body(UNAUTHORIZED);
         try{
-            Inventory inventory = inventoryService.getAllCardsInInventoryByUserId(id);
+            Inventory inventory = inventoryService.getAllCardsInInventoryByUserId(userId);
             return  ResponseEntity.ok().body(inventory);
         }catch(UserNotFoundException e){
             return ResponseEntity.status(400).body(e.getMessage());
@@ -112,7 +99,11 @@ public class CollectionController {
     }
 
     @GetMapping("users/{userId}/wishlists/{wishlistId}")
-    public ResponseEntity<?> getWishlistById(@PathVariable("userId") int userId, @PathVariable("wishlistId") int wishlistId) throws UnAuthorizedException {
+    public ResponseEntity<?> getWishlistById(
+            @PathVariable("userId") int userId,
+            @PathVariable("wishlistId") int wishlistId,
+            @RequestHeader("Authorization") String token) throws UnAuthorizedException, JsonProcessingException {
+        if(!returnFalseIfUserIdMismatch(userId, token)) ResponseEntity.status(401).body(UNAUTHORIZED);
         try{
             Wishlist wishList = wishlistService.getWishListById(wishlistId,userId);
             return  ResponseEntity.ok().body(wishList);
@@ -122,7 +113,11 @@ public class CollectionController {
     }
 
     @GetMapping("/users/{userId}/decks/{deckId}")
-    public ResponseEntity<?> getDeckById(@PathVariable("userId") int userId,@PathVariable("deckId")int deckId) {
+    public ResponseEntity<?> getDeckById(
+            @PathVariable("userId") int userId,
+            @PathVariable("deckId")int deckId,
+            @RequestHeader("Authorization") String token) throws JsonProcessingException {
+        if(!returnFalseIfUserIdMismatch(userId, token)) ResponseEntity.status(401).body(UNAUTHORIZED);
         try{
             Deck deck = deckService.getDeckById(deckId,userId);
             return  ResponseEntity.ok().body(deck);
@@ -132,20 +127,10 @@ public class CollectionController {
     }
 
 
-//    @GetMapping("/inventory/{inventoryId}")
-//    public ResponseEntity<?> getInventoryByUserId(@RequestParam("id") int userId, @PathParam("inventoryId") int inventoryId) {
-//        try{
-//            Inventory inventory = inventoryService.getInventoryById(inventoryId,userId);
-//            return  ResponseEntity.ok().body(inventory);
-//        }catch(UserNotFoundException e){
-//            return ResponseEntity.status(400).body(e.getMessage());
-//        }catch (CollectionDoesNotExistException e){
-//            return ResponseEntity.status(400).body(e.getMessage());
-//        }
-//    }
-
     @PostMapping("/wishlists")
-    public ResponseEntity<?> createWishlist(@RequestBody Wishlist wishlist){
+    public ResponseEntity<?> createWishlist(@RequestBody Wishlist wishlist, @RequestHeader("Authorization") String token) throws JsonProcessingException {
+        int userId = wishlist.getOwner().getId();
+        if(!returnFalseIfUserIdMismatch(userId, token)) ResponseEntity.status(401).body(UNAUTHORIZED);
         try{
             List<CardAmount> cardAmount = cardAmountService.createCardAmount(wishlist.getCards());
             wishlist.setCards(cardAmount);
@@ -157,7 +142,9 @@ public class CollectionController {
     }
 
    @PostMapping("/decks")
-    public ResponseEntity<?> createDeck(@RequestBody Deck deck){
+    public ResponseEntity<?> createDeck(@RequestBody Deck deck, @RequestHeader("Authorization") String token) throws JsonProcessingException {
+       int userId = deck.getOwner().getId();
+       if(!returnFalseIfUserIdMismatch(userId, token)) ResponseEntity.status(401).body(UNAUTHORIZED);
         try{
             BanList deckBanList = banListService.findBanList(deck.getBanList().getType());
             deck.setBanList(deckBanList);
@@ -169,19 +156,13 @@ public class CollectionController {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
- /*
-    @PostMapping("/wishlists")
-    public ResponseEntity<?> createInventory(Inventory inventory){
-        try{
-            Inventory createdInventory = inventoryService.createWishlist(inventory);
-            return ResponseEntity.ok().body(createdInventory);
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
-        }
-    }*/
 
-    @DeleteMapping("/wishlists/{wishlistId}")
-    public ResponseEntity<?> deleteWishlistById(@PathVariable("wishlistId")int wishlistId){
+    @DeleteMapping("/users/{userId}/wishlists/{wishlistId}")
+    public ResponseEntity<?> deleteWishlistById(
+            @PathVariable("userId") int userId,
+            @PathVariable("wishlistId")int wishlistId,
+            @RequestHeader("Authorization") String token) throws JsonProcessingException {
+        if(!returnFalseIfUserIdMismatch(userId, token)) ResponseEntity.status(401).body(UNAUTHORIZED);
         if (wishlistService.deleteWishlistById(wishlistId)) {
             return ResponseEntity.ok().body(true);
         } else {
@@ -189,25 +170,23 @@ public class CollectionController {
         }
     }
 
-    @DeleteMapping("/decks/{deckId}")
-    public ResponseEntity<?> deleteDeck(@PathVariable("deckId") int deckId){
+    @DeleteMapping("/users/{userId}/decks/{deckId}")
+    public ResponseEntity<?> deleteDeck(
+            @PathVariable("userId") int userId,
+            @PathVariable("deckId") int deckId,
+            @RequestHeader("Authorization") String token) throws JsonProcessingException {
+        if(!returnFalseIfUserIdMismatch(userId, token)) ResponseEntity.status(401).body(UNAUTHORIZED);
         if (deckService.deleteDeckById(deckId)) {
             return ResponseEntity.ok().body(true);
         } else {
             return ResponseEntity.status(400).body(false);
         }
     }
-    /*
-        @DeleteMapping("/inventory/{inventoryId}")
-        public ResponseEntity<?> deleteInventory(@RequestParam("inventoryId") int inventoryId){
-            if (inventoryService.deleteDeckById(inventoryId)) {
-                return ResponseEntity.ok().body(true);
-            } else {
-                return ResponseEntity.status(400).body(false);
-            }
-        }*/
+
     @PatchMapping("/wishlists")
-    public ResponseEntity<?> editWishlistById(@RequestBody Wishlist wishlist) {
+    public ResponseEntity<?> editWishlistById(@RequestBody Wishlist wishlist, @RequestHeader("Authorization") String token) throws JsonProcessingException {
+        int userId = wishlist.getOwner().getId();
+        if(!returnFalseIfUserIdMismatch(userId, token)) ResponseEntity.status(401).body(UNAUTHORIZED);
         try{
             Wishlist editedWishlist = wishlistService.editWishlist(wishlist);
             return ResponseEntity.ok().body(editedWishlist);
@@ -217,7 +196,9 @@ public class CollectionController {
     }
 
    @PatchMapping("/decks")
-    public ResponseEntity<?> editDeck(@RequestBody Deck deck){
+    public ResponseEntity<?> editDeck(@RequestBody Deck deck, @RequestHeader("Authorization") String token) throws JsonProcessingException {
+       int userId = deck.getOwner().getId();
+       if(!returnFalseIfUserIdMismatch(userId, token)) ResponseEntity.status(401).body(UNAUTHORIZED);
         try{
             Deck editedDeck = deckService.editDeck(deck);
             return ResponseEntity.ok().body(editedDeck);
@@ -227,12 +208,20 @@ public class CollectionController {
     }
 
     @PatchMapping("/inventory")
-    public ResponseEntity<?> editInventory(@RequestBody Inventory inventory){
+    public ResponseEntity<?> editInventory(@RequestBody Inventory inventory, @RequestHeader("Authorization") String token) throws JsonProcessingException {
+        int userId = inventory.getOwner().getId();
+        if(!returnFalseIfUserIdMismatch(userId, token)) ResponseEntity.status(401).body(UNAUTHORIZED);
         try{
             Inventory editedInventory = inventoryService.editInventory(inventory);
             return ResponseEntity.ok().body(editedInventory);
         }catch(UserNotFoundException | CollectionDoesNotExistException e){
             return ResponseEntity.status(400).body(e.getMessage());
         }
+    }
+
+    private boolean returnFalseIfUserIdMismatch(int userId, String token) throws JsonProcessingException {
+        String jwt = token.split(" ")[1];
+        UserDto user = jwtService.parseJwt(jwt);
+        return user.getId() == userId;
     }
 }

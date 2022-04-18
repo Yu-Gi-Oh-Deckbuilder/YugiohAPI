@@ -26,7 +26,7 @@ public class DeckService extends EntityService{
         return decks;
     }
 
-    public List<Deck> getAllDecksByUserId(int id) throws UserNotFoundException, CollectionDoesNotExistException, UnAuthorizedException {
+    public List<Deck> getAllDecksByUserId(int id) throws UserNotFoundException, CollectionDoesNotExistException {
         checkIfUserExists(id);
         List<Deck> decks = deckRepository.findAllByUserId(id);
         return decks;

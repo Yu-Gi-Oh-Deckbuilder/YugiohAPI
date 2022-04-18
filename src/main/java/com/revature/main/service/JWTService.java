@@ -10,11 +10,13 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
+
+import javax.crypto.SecretKey;
 import java.security.Key;
 
 @Service
 public class JWTService {
-    private Key key;
+    private final SecretKey key;
 
     public JWTService() {
         key = Keys.secretKeyFor(SignatureAlgorithm.HS384);
