@@ -1,7 +1,7 @@
 package com.revature.main.service;
 
 import com.revature.main.dao.DeckRepository;
-import com.revature.main.exceptions.UnAuthorizedException;
+import com.revature.main.dto.DeckDto;
 import com.revature.main.exceptions.UserNotFoundException;
 import com.revature.main.exceptions.CollectionDoesNotExistException;
 import com.revature.main.model.Deck;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DeckService extends EntityService{
@@ -21,45 +22,38 @@ public class DeckService extends EntityService{
 
 
     public List<Deck> getAllDecks(){
-        List<Deck> decks = deckRepository.findAll();
 
-        return decks;
+        return deckRepository.findAll();
     }
 
-    public List<Deck> getAllDecksByUserId(int id) throws UserNotFoundException, CollectionDoesNotExistException, UnAuthorizedException {
+    public List<Deck> getAllDecksByUserId(int id) throws UserNotFoundException, CollectionDoesNotExistException {
         checkIfUserExists(id);
-        List<Deck> decks = deckRepository.findAllByUserId(id);
-        return decks;
+        return deckRepository.findAllByUserId(id);
     }
 
     public Deck getDeckById(int id, int userId) throws UserNotFoundException, CollectionDoesNotExistException {
         checkIfUserExists(userId);
 
-        if(!deckRepository.existsById(id)){
-            throw new CollectionDoesNotExistException("Deck does not exist");
-        }
-
-       Deck deck = deckRepository.findById(id).get();
-
-        return deck;
+        Optional<Deck> deck = deckRepository.findById(id);
+        if (deck.isPresent()) return deck.get();
+        throw new CollectionDoesNotExistException("Deck does not exist");
     }
 
 
     @Transactional
-    public Deck editDeck(Deck target) throws UserNotFoundException, CollectionDoesNotExistException {
-        if(!deckRepository.existsById(target.getId())){
-            throw new CollectionDoesNotExistException("Deck with id "+target.getId()+" does not exist");
-        }
-
+    public Deck editDeck(DeckDto target) throws UserNotFoundException, CollectionDoesNotExistException {
         if(!userRepository.existsById(target.getOwner().getId())){
             throw new UserNotFoundException("User with id "+target.getOwner().getId()+ " does not exist");
         }
-
-        Deck source = deckRepository.findById(target.getId()).get();
-        source.setCards(target.getCards());
-        source.setBanList(target.getBanList());
-        source.setTotalCards(CollectionUtility.calculateTotal(target.getCards()));
-        return deckRepository.saveAndFlush(source);
+        Optional<Deck> deck = deckRepository.findById(target.getId());
+        if (deck.isPresent()) {
+            Deck source = deck.get();
+            source.setCards(target.getCards());
+            source.setBanList(target.getBanList());
+            source.setTotalCards(CollectionUtility.calculateTotal(target.getCards()));
+            return deckRepository.saveAndFlush(source);
+        }
+        throw new CollectionDoesNotExistException("Deck with id "+target.getId()+" does not exist");
     }
 
     @Transactional
@@ -72,12 +66,17 @@ public class DeckService extends EntityService{
     }
 
     @Transactional
-    public Deck createDeck(Deck deck) throws UserNotFoundException {
+    public Deck createDeck(DeckDto deck) throws UserNotFoundException {
         checkIfUserExists(deck.getOwner().getId());
 
-        deck.setTotalCards(CollectionUtility.calculateTotal(deck.getCards()));
-        deckRepository.saveAndFlush(deck);
+        Deck newDeck = new Deck();
+        newDeck.setBanList(deck.getBanList());
+        newDeck.setCards(deck.getCards());
+        newDeck.setName(deck.getName());
+        newDeck.setOwner(deck.getOwner());
+        newDeck.setTotalCards(CollectionUtility.calculateTotal(deck.getCards()));
+        deckRepository.saveAndFlush(newDeck);
 
-        return deck;
+        return newDeck;
     }
 }

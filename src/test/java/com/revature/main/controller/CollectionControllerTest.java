@@ -1,5 +1,10 @@
 package com.revature.main.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.revature.main.dto.DeckDto;
+import com.revature.main.dto.InventoryDto;
+import com.revature.main.dto.UserDto;
+import com.revature.main.dto.WishlistDto;
 import com.revature.main.exceptions.CollectionDoesNotExistException;
 import com.revature.main.exceptions.UnAuthorizedException;
 import com.revature.main.exceptions.UserNotFoundException;
@@ -28,6 +33,12 @@ public class CollectionControllerTest {
     private static Deck deck;
     private static List<CardAmount> cards;
     private static BanList banList;
+    private static String token;
+    private static String jwt;
+    private static UserDto userDto;
+    private static WishlistDto wishlistDto;
+    private static DeckDto deckDto;
+    private static InventoryDto inventoryDto;
 
     @Mock
     DeckService deckService;
@@ -44,6 +55,9 @@ public class CollectionControllerTest {
     @Mock
     InventoryService inventoryService;
 
+    @Mock
+    JWTService jwtService;
+
     @InjectMocks
     private CollectionController collectionsController;
 
@@ -57,7 +71,9 @@ public class CollectionControllerTest {
         inventory = new Inventory();
         banList = new BanList();
         cards = new ArrayList<>();
-
+        inventoryDto = new InventoryDto();
+        deckDto = new DeckDto();
+        wishlistDto = new WishlistDto();
 
         cards.add(new CardAmount());
 
@@ -77,42 +93,37 @@ public class CollectionControllerTest {
         inventory.setId(1);
         inventory.setOwner(user);
         inventory.setCards(cards);
+
+        token = "Bearer jwt";
+        jwt = token.split(" ")[1];
+
+        userDto = new UserDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getUserRole());
+
+        inventoryDto.setId(inventory.getId());
+        inventoryDto.setOwner(inventory.getOwner());
+        inventoryDto.setCards(inventory.getCards());
+
+        deckDto.setId(deck.getId());
+        deckDto.setOwner(deck.getOwner());
+        deckDto.setCards(deck.getCards());
+        deckDto.setBanList(deck.getBanList());
+
+        wishlistDto.setId(wishlist.getId());
+        wishlistDto.setOwner(wishlist.getOwner());
+        wishlistDto.setCards(wishlist.getCards());
+        wishlistDto.setSharedUsers(wishlist.getSharedUsers());
     }
 
-   /* @Test
-    public void getAllCollectionsByUserId_positive() throws UserNotFoundException {
-        List<Collection> allCollections = new ArrayList<>();
-        List<Wishlist> allWishlist = new ArrayList<>();
-
-
-        allWishlist.add(wishlist);
-        allCollections.add(wishlist);
-
-        when(wishListService.getAllWishlistByUserId(1)).thenReturn((allWishlist));
-        //when(deckService.getAllDeckByUserId(1)).thenReturn((allDecks));
-        //when(inventoryService.getInventoryByUserId(1)).thenReturn((inventory));
-        ResponseEntity responseEntity = collectionsController.getAllCollectionsByUserId(user.getId());
-
-        List<Collection> collectionList = (List<Collection>) responseEntity.getBody();
-
-        assertThat(allCollections).isEqualTo(collectionList);
-    }*/
-/*
-    @Test
-    public void getAllCollectionsByUserId_UserNotFoundException(){
-        Assertions.assertThrows(UserNotFoundException.class, ()->{
-            collectionsController.getAllWishlistsByUserId(user.getId());
-        });
-    }*/
 
     @Test
-    public void getAllWishlistsByUserId_positive() throws UserNotFoundException {
+    public void getAllWishlistsByUserId_positive() throws UserNotFoundException, JsonProcessingException {
         List<Wishlist> allWishlist = new ArrayList<>();
 
         allWishlist.add(wishlist);
 
         when(wishListService.getAllWishlistByUserId(1)).thenReturn((allWishlist));
-        ResponseEntity<?> responseEntity = collectionsController.getAllWishlistsByUserId(user.getId());
+        when(jwtService.parseJwt(jwt)).thenReturn(userDto);
+        ResponseEntity<?> responseEntity = collectionsController.getAllWishlistsByUserId(user.getId(), token);
 
         List<Wishlist> collectionList = (List<Wishlist>) responseEntity.getBody();
 
@@ -120,12 +131,13 @@ public class CollectionControllerTest {
     }
 
 
-    @Test void getAllDecksByUserId_positive() throws UserNotFoundException, CollectionDoesNotExistException, UnAuthorizedException {
+    @Test void getAllDecksByUserId_positive() throws UserNotFoundException, CollectionDoesNotExistException, JsonProcessingException {
         List<Deck> decks = new ArrayList<>();
 
         decks.add(deck);
         when(deckService.getAllDecksByUserId(1)).thenReturn(decks);
-        ResponseEntity<?> responseEntity = collectionsController.getAllDecksByUserId(user.getId());
+        when(jwtService.parseJwt(jwt)).thenReturn(userDto);
+        ResponseEntity<?> responseEntity = collectionsController.getAllDecksByUserId(user.getId(), token);
 
         List<Deck> deckList = (List<Deck>) responseEntity.getBody();
 
@@ -134,9 +146,10 @@ public class CollectionControllerTest {
     }
 
 
-    @Test void getInventoryByUserId_positive() throws UserNotFoundException {
+    @Test void getInventoryByUserId_positive() throws UserNotFoundException, JsonProcessingException {
         when(inventoryService.getAllCardsInInventoryByUserId(1)).thenReturn(inventory);
-        ResponseEntity<?> responseEntity = collectionsController.getInventoryByUserId(user.getId());
+        when(jwtService.parseJwt(jwt)).thenReturn(userDto);
+        ResponseEntity<?> responseEntity = collectionsController.getInventoryByUserId(user.getId(), token);
 
         Inventory target = (Inventory) responseEntity.getBody();
 
@@ -144,125 +157,107 @@ public class CollectionControllerTest {
     }
 
     @Test
-    public void getWishlistById_positive() throws UserNotFoundException, CollectionDoesNotExistException, UnAuthorizedException {
+    public void getWishlistById_positive() throws UserNotFoundException, CollectionDoesNotExistException, UnAuthorizedException, JsonProcessingException {
         when(wishListService.getWishListById(1,1)).thenReturn(wishlist);
+        when(jwtService.parseJwt(jwt)).thenReturn(userDto);
 
-        ResponseEntity<?> responseEntity = collectionsController.getWishlistById(user.getId(),wishlist.getId());
+        ResponseEntity<?> responseEntity = collectionsController.getWishlistById(user.getId(),wishlist.getId(),token);
         Wishlist target = (Wishlist) responseEntity.getBody();
 
         assertThat(wishlist).isEqualTo(target);
     }
 
    @Test
-    public void getDeckById_positive() throws UserNotFoundException, CollectionDoesNotExistException {
+    public void getDeckById_positive() throws UserNotFoundException, CollectionDoesNotExistException, JsonProcessingException {
         when(deckService.getDeckById(1,1)).thenReturn(deck);
+        when(jwtService.parseJwt(jwt)).thenReturn(userDto);
 
-        ResponseEntity<?> responseEntity = collectionsController.getDeckById(user.getId(),deck.getId());
+        ResponseEntity<?> responseEntity = collectionsController.getDeckById(user.getId(),deck.getId(),token);
         Deck target = (Deck) responseEntity.getBody();
 
         assertThat(deck).isEqualTo(target);
     }
-/*
-    @Test
-    public void getInventoryById_positive(){
-        when(inventoryService.getInventoryById(1,1)).thenReturn(inventory);
-
-        ResponseEntity responseEntity = collectionsController.getInventoryById(user.getId(),inventory.getId());
-        Inventory target = (Inventory) responseEntity.getBody();
-
-        assertThat(invenetory).isEqualTo(target);
-    }*/
 
     @Test
-    public void deleteWishlistById_positive() {
+    public void deleteWishlistById_positive() throws JsonProcessingException {
         when(wishListService.deleteWishlistById(1)).thenReturn(true);
-        ResponseEntity<?> actual =  collectionsController.deleteWishlistById(1);
+        when(jwtService.parseJwt(jwt)).thenReturn(userDto);
+        ResponseEntity<?> actual =  collectionsController.deleteWishlistById(1, 1, token);
         assertThat((Boolean)actual.getBody()).isEqualTo(true);
     }
 
     @Test
-    public void deleteWishlistById_negative(){
-        ResponseEntity<?> actual =  collectionsController.deleteWishlistById(1);
+    public void deleteWishlistById_negative() throws JsonProcessingException {
+        when(jwtService.parseJwt(jwt)).thenReturn(userDto);
+        ResponseEntity<?> actual =  collectionsController.deleteWishlistById(1, 1, token);
         assertThat((Boolean)actual.getBody()).isEqualTo(false);
     }
 
     @Test
-    public void deleteDeckById_positive() {
+    public void deleteDeckById_positive() throws JsonProcessingException {
         when(deckService.deleteDeckById(1)).thenReturn(true);
-        ResponseEntity<?> actual =  collectionsController.deleteDeck(1);
+        when(jwtService.parseJwt(jwt)).thenReturn(userDto);
+        ResponseEntity<?> actual =  collectionsController.deleteDeck(1, 1, token);
         assertThat((Boolean)actual.getBody()).isEqualTo(true);
     }
 
     @Test
-    public void deleteDeckById_negative(){
-        ResponseEntity<?> actual =  collectionsController.deleteDeck(1);
+    public void deleteDeckById_negative() throws JsonProcessingException {
+        when(jwtService.parseJwt(jwt)).thenReturn(userDto);
+        ResponseEntity<?> actual =  collectionsController.deleteDeck(1, 1, token);
         assertThat((Boolean)actual.getBody()).isEqualTo(false);
     }
-/*
-    @Test
-    public void deleteInventoryById_positive() throws UserNotFoundException {
-        when(inventoryService.deleteWishlistById(1)).thenReturn(true);
-        ResponseEntity actual =  collectionsController.deleteInventoryById(1);
-        assertThat((Boolean)actual.getBody()).isEqualTo(true);
-    }
 
     @Test
-    public void deleteInventoryById_negative(){
-        ResponseEntity actual =  collectionsController.deleteInventoryById(1);
-        assertThat((Boolean)actual.getBody()).isEqualTo(false);
-    }*/
+    public void editWishlistById_positive() throws UserNotFoundException, CollectionDoesNotExistException, JsonProcessingException {
 
-    @Test
-    public void editWishlistById_positive() throws UserNotFoundException, CollectionDoesNotExistException {
-        when(wishListService.editWishlist(wishlist)).thenReturn(wishlist);
 
-        Wishlist editedWishlist = (Wishlist) collectionsController.editWishlistById(wishlist).getBody();
+        when(wishListService.editWishlist(wishlistDto)).thenReturn(wishlist);
+        when(jwtService.parseJwt(jwt)).thenReturn(userDto);
+
+        Wishlist editedWishlist = (Wishlist) collectionsController.editWishlistById(wishlistDto, token).getBody();
 
         assertThat(editedWishlist).isEqualTo(wishlist);
     }
 
     @Test
-    public void editDeckById_positive() throws UserNotFoundException, CollectionDoesNotExistException {
-        when(deckService.editDeck(deck)).thenReturn(deck);
+    public void editDeckById_positive() throws UserNotFoundException, CollectionDoesNotExistException, JsonProcessingException {
+        when(deckService.editDeck(deckDto)).thenReturn(deck);
+        when(jwtService.parseJwt(jwt)).thenReturn(userDto);
 
-        Deck editedDeck = (Deck) collectionsController.editDeck(deck).getBody();
+        Deck editedDeck = (Deck) collectionsController.editDeck(deckDto, token).getBody();
 
         assertThat(editedDeck).isEqualTo(deck);
     }
 
     @Test
-    public void editInventory_positive() throws UserNotFoundException, CollectionDoesNotExistException {
-        when(inventoryService.editInventory(inventory)).thenReturn(inventory);
+    public void editInventory_positive() throws UserNotFoundException, CollectionDoesNotExistException, JsonProcessingException {
+        when(inventoryService.editInventory(inventoryDto)).thenReturn(inventory);
+        when(jwtService.parseJwt(jwt)).thenReturn(userDto);
 
-        Inventory editedInventory = (Inventory) collectionsController.editInventory(inventory).getBody();
+        Inventory editedInventory = (Inventory) collectionsController.editInventory(inventoryDto, token).getBody();
 
         assertThat(editedInventory).isEqualTo(inventory);
     }
 
-    /*@Test
-    public void editWishlistById_CollectionDoesNotExist() throws UserNotFoundException, CollectionDoesNotExistException {
-        //when(wishListService.editWishlist(wishlist)).thenReturn(null);
-
-        Assertions.assertThrows(CollectionDoesNotExistException.class,()->{
-            collectionsController.editWishlistById(wishlist);
-        });
-    }*/
 
     @Test
-    public void createWishlist_positive() throws UserNotFoundException {
-        when(wishListService.createWishlist(wishlist)).thenReturn(wishlist);
+    public void createWishlist_positive() throws UserNotFoundException, JsonProcessingException {
+        when(wishListService.createWishlist(wishlistDto)).thenReturn(wishlist);
         when(cardAmountService.createCardAmount(cards)).thenReturn(cards);
+        when(jwtService.parseJwt(jwt)).thenReturn(userDto);
 
-        Wishlist createdWishlist = (Wishlist) collectionsController.createWishlist(wishlist).getBody();
+        Wishlist createdWishlist = (Wishlist) collectionsController.createWishlist(wishlistDto, token).getBody();
 
         assertThat(createdWishlist).isEqualTo(wishlist);
     }
 
     @Test
-    public void createDeck_positive() throws UserNotFoundException {
-        when(deckService.createDeck(deck)).thenReturn(deck);
+    public void createDeck_positive() throws UserNotFoundException, JsonProcessingException {
+        when(deckService.createDeck(deckDto)).thenReturn(deck);
         when(banListService.findBanList(deck.getBanList().getType())).thenReturn(banList);
-        Deck createdDeck = (Deck) collectionsController.createDeck(deck).getBody();
+        when(jwtService.parseJwt(jwt)).thenReturn(userDto);
+        Deck createdDeck = (Deck) collectionsController.createDeck(deckDto, token).getBody();
 
         assertThat(createdDeck).isEqualTo(deck);
     }

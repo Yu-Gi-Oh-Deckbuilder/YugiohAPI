@@ -1,11 +1,10 @@
 package com.revature.main.service;
 
-import com.revature.main.dao.CardAmountRepository;
 import com.revature.main.dao.WishlistRepository;
+import com.revature.main.dto.WishlistDto;
 import com.revature.main.exceptions.UnAuthorizedException;
 import com.revature.main.exceptions.UserNotFoundException;
 import com.revature.main.exceptions.CollectionDoesNotExistException;
-import com.revature.main.model.CardAmount;
 import com.revature.main.model.User;
 import com.revature.main.model.Wishlist;
 import com.revature.main.util.CollectionUtility;
@@ -31,9 +30,7 @@ public class WishlistService extends EntityService{
     public List<Wishlist> getAllWishlistByUserId(int id) throws UserNotFoundException {
        checkIfUserExists(id);
 
-        List<Wishlist> wishlists = wishlistRepository.findAllByUserId(id);
-
-        return wishlists;
+        return wishlistRepository.findAllByUserId(id);
     }
 
     public Wishlist getWishListById(int id, int userId) throws UserNotFoundException, UnAuthorizedException, CollectionDoesNotExistException {
@@ -56,7 +53,7 @@ public class WishlistService extends EntityService{
     }
 
     @Transactional
-    public Wishlist editWishlist(Wishlist target) throws UserNotFoundException, CollectionDoesNotExistException {
+    public Wishlist editWishlist(WishlistDto target) throws UserNotFoundException, CollectionDoesNotExistException {
         if(!wishlistRepository.existsById(target.getId())){
             throw new CollectionDoesNotExistException("Wishlist with id "+target.getId()+" does not exist");
         }
@@ -72,8 +69,7 @@ public class WishlistService extends EntityService{
         source.setTotalCards(CollectionUtility.calculateTotal(target.getCards()));
 
         //flushing will save the object to the database
-        Wishlist wishlist = wishlistRepository.saveAndFlush(source);
-        return wishlist;
+        return wishlistRepository.saveAndFlush(source);
     }
 
     @Transactional
@@ -86,12 +82,17 @@ public class WishlistService extends EntityService{
     }
 
     @Transactional
-    public Wishlist createWishlist(Wishlist wishlist) throws UserNotFoundException {
+    public Wishlist createWishlist(WishlistDto wishlist) throws UserNotFoundException {
         checkIfUserExists(wishlist.getOwner().getId());
 
-        wishlist.setTotalCards(CollectionUtility.calculateTotal(wishlist.getCards()));
-        wishlistRepository.save(wishlist);
+        Wishlist newWishlist = new Wishlist();
+        newWishlist.setName(wishlist.getName());
+        newWishlist.setCards(wishlist.getCards());
+        newWishlist.setOwner(wishlist.getOwner());
+        newWishlist.setSharedUsers(wishlist.getSharedUsers());
+        newWishlist.setTotalCards(CollectionUtility.calculateTotal(wishlist.getCards()));
+        wishlistRepository.save(newWishlist);
 
-        return wishlist;
+        return newWishlist;
     }
 }

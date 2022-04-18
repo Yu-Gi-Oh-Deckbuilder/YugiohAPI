@@ -2,6 +2,7 @@ package com.revature.main.service;
 
 import com.revature.main.dao.DeckRepository;
 import com.revature.main.dao.UserRepository;
+import com.revature.main.dto.DeckDto;
 import com.revature.main.exceptions.CollectionDoesNotExistException;
 import com.revature.main.exceptions.UnAuthorizedException;
 import com.revature.main.exceptions.UserNotFoundException;
@@ -35,25 +36,23 @@ public class DeckServiceTest {
     DeckService deckService;
 
     private static User user;
-    private static User user2;
-    private static  Role role;
     private static Deck deck;
     private static Deck deck2;
-    private static List<CardAmount> cards;
-    private static BanList banList;
+    private static DeckDto deckDto;
 
     @BeforeAll
     public static void init (){
-        role = new Role(1,"user");
+        Role role = new Role(1, "user");
         user = new User(1,"test", "testpass", "test", "test", "test@email.com", role);
-        user2 =  new User(2,"test2", "testpass", "test", "test", "test@email.com", role);
+        User user2 = new User(2, "test2", "testpass", "test", "test", "test@email.com", role);
         deck = new Deck();
         deck2 = new Deck();
+        deckDto = new DeckDto();
 
-        cards = new ArrayList<>();
+        List<CardAmount> cards = new ArrayList<>();
         cards.add(new CardAmount());
 
-        banList = new BanList(1, "TCG");
+        BanList banList = new BanList(1, "TCG");
 
         deck.setId(1);
         deck.setOwner(user);
@@ -64,6 +63,11 @@ public class DeckServiceTest {
         deck2.setOwner(user);
         deck2.setCards(cards);
         deck2.setBanList(banList);
+
+        deckDto.setId(deck.getId());
+        deckDto.setOwner(deck.getOwner());
+        deckDto.setCards(deck.getCards());
+        deckDto.setBanList(deck.getBanList());
     }
 
     @Test
@@ -79,7 +83,7 @@ public class DeckServiceTest {
     }
 
     @Test
-    public void getAllDecksByUserId_positive() throws UserNotFoundException, CollectionDoesNotExistException, UnAuthorizedException {
+    public void getAllDecksByUserId_positive() throws UserNotFoundException, CollectionDoesNotExistException {
         List<Deck> decks = new ArrayList<>();
         decks.add(deck);
         decks.add(deck2);
@@ -101,7 +105,6 @@ public class DeckServiceTest {
     @Test
     public void getDeckById_positive() throws UserNotFoundException, CollectionDoesNotExistException {
         when(deckRepository.findById(1)).thenReturn(Optional.of(deck));
-        when(deckRepository.existsById(1)).thenReturn(true);
         when(userRepository.existsById(1)).thenReturn(true);
         Deck actual = deckService.getDeckById(1,user.getId());
 
@@ -129,30 +132,29 @@ public class DeckServiceTest {
     public void editDeck_positive() throws UserNotFoundException, CollectionDoesNotExistException {
 
         when(deckRepository.findById(1)).thenReturn(Optional.of(deck));
-        when(deckRepository.existsById(deck.getId())).thenReturn(true);
         when(userRepository.existsById(deck.getOwner().getId())).thenReturn(true);
         Deck expected = new Deck();
         expected.setCards(deck.getCards());
         expected.setOwner(deck.getOwner());
         expected.setId(deck.getId());
+        expected.setBanList(deck.getBanList());
 
         when(deckRepository.saveAndFlush(expected)).thenReturn(expected);
-        Deck actual = deckService.editDeck(expected);
+        Deck actual = deckService.editDeck(deckDto);
 
         assertThat(actual).isEqualTo(expected);
     }
 
     @Test public void editDeck_CollectionDoesNotExistException(){
+        when(userRepository.existsById(deckDto.getOwner().getId())).thenReturn(true);
         Assertions.assertThrows(CollectionDoesNotExistException.class,()->{
-            deckService.editDeck(deck);
+            deckService.editDeck(deckDto);
         });
     }
 
     @Test public void editDeck_UserNotFoundException(){
-        when(deckRepository.existsById(deck.getId())).thenReturn(true);
-
         Assertions.assertThrows(UserNotFoundException.class,()->{
-            deckService.editDeck(deck);
+            deckService.editDeck(deckDto);
         });
     }
 
@@ -171,16 +173,21 @@ public class DeckServiceTest {
 
     @Test
     public void createDeck_positive() throws UserNotFoundException {
-        when(userRepository.existsById(deck.getOwner().getId())).thenReturn(true);
-
-        Deck actual = deckService.createDeck(deck);
-        assertThat(actual).isEqualTo(deck);
+        Deck newDeck = new Deck();
+        newDeck.setName(deck.getName());
+        newDeck.setOwner(deck.getOwner());
+        newDeck.setBanList(deck.getBanList());
+        newDeck.setCards(deck.getCards());
+        when(userRepository.existsById(deckDto.getOwner().getId())).thenReturn(true);
+        when(deckRepository.saveAndFlush(newDeck)).thenReturn(newDeck);
+        Deck actual = deckService.createDeck(deckDto);
+        assertThat(actual).isEqualTo(newDeck);
     }
 
     @Test
     public void createDeck_UserNotFoundException(){
         Assertions.assertThrows(UserNotFoundException.class, ()->{
-            deckService.createDeck(deck);
+            deckService.createDeck(deckDto);
         });
     }
 }
