@@ -1,7 +1,7 @@
 package com.revature.main.service;
 
 import com.revature.main.dao.DeckRepository;
-import com.revature.main.exceptions.UnAuthorizedException;
+import com.revature.main.dto.DeckDto;
 import com.revature.main.exceptions.UserNotFoundException;
 import com.revature.main.exceptions.CollectionDoesNotExistException;
 import com.revature.main.model.Deck;
@@ -42,7 +42,7 @@ public class DeckService extends EntityService{
 
 
     @Transactional
-    public Deck editDeck(Deck target) throws UserNotFoundException, CollectionDoesNotExistException {
+    public Deck editDeck(DeckDto target) throws UserNotFoundException, CollectionDoesNotExistException {
         if(!deckRepository.existsById(target.getId())){
             throw new CollectionDoesNotExistException("Deck with id "+target.getId()+" does not exist");
         }
@@ -68,7 +68,7 @@ public class DeckService extends EntityService{
     }
 
     @Transactional
-    public Deck createDeck(Deck deck) throws UserNotFoundException {
+    public Deck createDeck(DeckDto deck) throws UserNotFoundException {
         checkIfUserExists(deck.getOwner().getId());
 
         Deck newDeck = new Deck();
@@ -79,6 +79,6 @@ public class DeckService extends EntityService{
         newDeck.setTotalCards(CollectionUtility.calculateTotal(deck.getCards()));
         deckRepository.saveAndFlush(newDeck);
 
-        return deck;
+        return newDeck;
     }
 }

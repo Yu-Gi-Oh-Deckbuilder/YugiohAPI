@@ -1,7 +1,10 @@
 package com.revature.main.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.revature.main.dto.DeckDto;
+import com.revature.main.dto.InventoryDto;
 import com.revature.main.dto.UserDto;
+import com.revature.main.dto.WishlistDto;
 import com.revature.main.exceptions.CollectionDoesNotExistException;
 import com.revature.main.exceptions.UnAuthorizedException;
 import com.revature.main.exceptions.UserNotFoundException;
@@ -33,6 +36,9 @@ public class CollectionControllerTest {
     private static String token;
     private static String jwt;
     private static UserDto userDto;
+    private static WishlistDto wishlistDto;
+    private static DeckDto deckDto;
+    private static InventoryDto inventoryDto;
 
     @Mock
     DeckService deckService;
@@ -65,6 +71,9 @@ public class CollectionControllerTest {
         inventory = new Inventory();
         banList = new BanList();
         cards = new ArrayList<>();
+        inventoryDto = new InventoryDto();
+        deckDto = new DeckDto();
+        wishlistDto = new WishlistDto();
 
         cards.add(new CardAmount());
 
@@ -89,6 +98,20 @@ public class CollectionControllerTest {
         jwt = token.split(" ")[1];
 
         userDto = new UserDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getUserRole());
+
+        inventoryDto.setId(inventory.getId());
+        inventoryDto.setOwner(inventory.getOwner());
+        inventoryDto.setCards(inventory.getCards());
+
+        deckDto.setId(deck.getId());
+        deckDto.setOwner(deck.getOwner());
+        deckDto.setCards(deck.getCards());
+        deckDto.setBanList(deck.getBanList());
+
+        wishlistDto.setId(wishlist.getId());
+        wishlistDto.setOwner(wishlist.getOwner());
+        wishlistDto.setCards(wishlist.getCards());
+        wishlistDto.setSharedUsers(wishlist.getSharedUsers());
     }
 
 
@@ -187,30 +210,32 @@ public class CollectionControllerTest {
 
     @Test
     public void editWishlistById_positive() throws UserNotFoundException, CollectionDoesNotExistException, JsonProcessingException {
-        when(wishListService.editWishlist(wishlist)).thenReturn(wishlist);
+
+
+        when(wishListService.editWishlist(wishlistDto)).thenReturn(wishlist);
         when(jwtService.parseJwt(jwt)).thenReturn(userDto);
 
-        Wishlist editedWishlist = (Wishlist) collectionsController.editWishlistById(wishlist, token).getBody();
+        Wishlist editedWishlist = (Wishlist) collectionsController.editWishlistById(wishlistDto, token).getBody();
 
         assertThat(editedWishlist).isEqualTo(wishlist);
     }
 
     @Test
     public void editDeckById_positive() throws UserNotFoundException, CollectionDoesNotExistException, JsonProcessingException {
-        when(deckService.editDeck(deck)).thenReturn(deck);
+        when(deckService.editDeck(deckDto)).thenReturn(deck);
         when(jwtService.parseJwt(jwt)).thenReturn(userDto);
 
-        Deck editedDeck = (Deck) collectionsController.editDeck(deck, token).getBody();
+        Deck editedDeck = (Deck) collectionsController.editDeck(deckDto, token).getBody();
 
         assertThat(editedDeck).isEqualTo(deck);
     }
 
     @Test
     public void editInventory_positive() throws UserNotFoundException, CollectionDoesNotExistException, JsonProcessingException {
-        when(inventoryService.editInventory(inventory)).thenReturn(inventory);
+        when(inventoryService.editInventory(inventoryDto)).thenReturn(inventory);
         when(jwtService.parseJwt(jwt)).thenReturn(userDto);
 
-        Inventory editedInventory = (Inventory) collectionsController.editInventory(inventory, token).getBody();
+        Inventory editedInventory = (Inventory) collectionsController.editInventory(inventoryDto, token).getBody();
 
         assertThat(editedInventory).isEqualTo(inventory);
     }
@@ -218,21 +243,21 @@ public class CollectionControllerTest {
 
     @Test
     public void createWishlist_positive() throws UserNotFoundException, JsonProcessingException {
-        when(wishListService.createWishlist(wishlist)).thenReturn(wishlist);
+        when(wishListService.createWishlist(wishlistDto)).thenReturn(wishlist);
         when(cardAmountService.createCardAmount(cards)).thenReturn(cards);
         when(jwtService.parseJwt(jwt)).thenReturn(userDto);
 
-        Wishlist createdWishlist = (Wishlist) collectionsController.createWishlist(wishlist, token).getBody();
+        Wishlist createdWishlist = (Wishlist) collectionsController.createWishlist(wishlistDto, token).getBody();
 
         assertThat(createdWishlist).isEqualTo(wishlist);
     }
 
     @Test
     public void createDeck_positive() throws UserNotFoundException, JsonProcessingException {
-        when(deckService.createDeck(deck)).thenReturn(deck);
+        when(deckService.createDeck(deckDto)).thenReturn(deck);
         when(banListService.findBanList(deck.getBanList().getType())).thenReturn(banList);
         when(jwtService.parseJwt(jwt)).thenReturn(userDto);
-        Deck createdDeck = (Deck) collectionsController.createDeck(deck, token).getBody();
+        Deck createdDeck = (Deck) collectionsController.createDeck(deckDto, token).getBody();
 
         assertThat(createdDeck).isEqualTo(deck);
     }
