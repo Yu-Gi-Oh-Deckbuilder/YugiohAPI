@@ -3,6 +3,7 @@ package com.revature.main.service;
 
 import com.revature.main.dao.UserRepository;
 import com.revature.main.dao.WishlistRepository;
+import com.revature.main.dto.WishlistDto;
 import com.revature.main.exceptions.UnAuthorizedException;
 import com.revature.main.exceptions.UserNotFoundException;
 import com.revature.main.exceptions.CollectionDoesNotExistException;
@@ -33,7 +34,7 @@ public class WishlistServiceTest {
     private static User user2;
     private static  Role role;
     private static Wishlist wishlist;
-    private static List<CardAmount> cards;
+    private static WishlistDto wishlistDto;
 
     @Mock
     WishlistRepository wishlistRepository;
@@ -50,16 +51,22 @@ public class WishlistServiceTest {
         user = new User(1,"test", "testpass", "test", "test", "test@email.com", role);
         user2 =  new User(2,"test2", "testpass", "test", "test", "test@email.com", role);
         wishlist = new Wishlist();
+        wishlistDto = new WishlistDto();
 
-        cards = new ArrayList<>();
+        List<CardAmount> cards = new ArrayList<>();
         cards.add(new CardAmount());
 
         wishlist.setId(1);
         wishlist.setOwner(user);
         wishlist.setCards(cards);
-        wishlist.setSharedUsers(new ArrayList<User>());
+        wishlist.setSharedUsers(new ArrayList<>());
         wishlist.getSharedUsers().add(user);
         wishlist.getSharedUsers().add(user2);
+
+        wishlistDto.setId(wishlist.getId());
+        wishlistDto.setOwner(wishlist.getOwner());
+        wishlistDto.setCards(wishlist.getCards());
+        wishlistDto.setSharedUsers(wishlist.getSharedUsers());
     }
 
     @Test
@@ -150,14 +157,14 @@ public class WishlistServiceTest {
         expected.setId(wishlist.getId());
 
         when(wishlistRepository.saveAndFlush(expected)).thenReturn(expected);
-        Wishlist actual = wishlistService.editWishlist(expected);
+        Wishlist actual = wishlistService.editWishlist(wishlistDto);
 
         assertThat(actual).isEqualTo(expected);
     }
 
     @Test public void editWishlist_WishlistNotFoundException(){
         Assertions.assertThrows(CollectionDoesNotExistException.class,()->{
-            wishlistService.editWishlist(wishlist);
+            wishlistService.editWishlist(wishlistDto);
         });
     }
 
@@ -166,7 +173,7 @@ public class WishlistServiceTest {
         when(wishlistRepository.existsById(wishlist.getId())).thenReturn(true);
 
         Assertions.assertThrows(UserNotFoundException.class,()->{
-            wishlistService.editWishlist(wishlist);
+            wishlistService.editWishlist(wishlistDto);
         });
     }
 
@@ -185,16 +192,20 @@ public class WishlistServiceTest {
 
     @Test
     public void createWishlist_positive() throws UserNotFoundException {
-        when(wishlistRepository.save(wishlist)).thenReturn(wishlist);
+        Wishlist newWishlist = new Wishlist();
+        newWishlist.setOwner(wishlist.getOwner());
+        newWishlist.setCards(wishlist.getCards());
+        newWishlist.setSharedUsers(wishlist.getSharedUsers());
+        when(wishlistRepository.save(newWishlist)).thenReturn(newWishlist);
         when(userRepository.existsById(wishlist.getOwner().getId())).thenReturn(true);
-        Wishlist actual = wishlistService.createWishlist(wishlist);
-        assertThat(actual).isEqualTo(wishlist);
+        Wishlist actual = wishlistService.createWishlist(wishlistDto);
+        assertThat(actual).isEqualTo(newWishlist);
     }
 
     @Test
     public void createWishlist_UserNotFoundException(){
         Assertions.assertThrows(UserNotFoundException.class, ()->{
-            wishlistService.createWishlist(wishlist);
+            wishlistService.createWishlist(wishlistDto);
         });
     }
 }

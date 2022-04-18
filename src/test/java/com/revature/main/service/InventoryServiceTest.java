@@ -2,6 +2,7 @@ package com.revature.main.service;
 
 import com.revature.main.dao.InventoryRepository;
 import com.revature.main.dao.UserRepository;
+import com.revature.main.dto.InventoryDto;
 import com.revature.main.exceptions.CollectionDoesNotExistException;
 import com.revature.main.exceptions.UserNotFoundException;
 import com.revature.main.model.CardAmount;
@@ -42,22 +43,21 @@ class InventoryServiceTest {
 
 
     private static User user;
-    private static User user2;
-    private static Role role;
     private static Inventory inventory;
     private static Inventory inventory2;
-    private static List<CardAmount> cards;
+    private static InventoryDto inventoryDto;
 
 
     @BeforeAll
     public static void init (){
-        role = new Role(1,"user");
+        Role role = new Role(1, "user");
         user = new User(1,"test", "testpass", "test", "test", "test@email.com", role);
-        user2 =  new User(2,"test2", "testpass", "test", "test", "test@email.com", role);
+        User user2 = new User(2, "test2", "testpass", "test", "test", "test@email.com", role);
         inventory = new Inventory();
         inventory2 = new Inventory();
+        inventoryDto = new InventoryDto();
 
-        cards = new ArrayList<>();
+        List<CardAmount> cards = new ArrayList<>();
         cards.add(new CardAmount());
 
 
@@ -69,6 +69,9 @@ class InventoryServiceTest {
         inventory2.setOwner(user2);
         inventory2.setCards(cards);
 
+        inventoryDto.setId(inventory.getId());
+        inventoryDto.setOwner(inventory.getOwner());
+        inventoryDto.setCards(inventory.getCards());
     }
 
     @Test
@@ -140,21 +143,21 @@ class InventoryServiceTest {
         expected.setId(inventory.getId());
 
         when(inventoryRepository.saveAndFlush(expected)).thenReturn(expected);
-        Inventory actual = inventoryService.editInventory(expected);
+        Inventory actual = inventoryService.editInventory(inventoryDto);
 
         assertThat(actual).isEqualTo(expected);
     }
 
     @Test public void editInventory_CollectionDoesNotExistException(){
         Assertions.assertThrows(CollectionDoesNotExistException.class,
-                ()-> inventoryService.editInventory(inventory));
+                ()-> inventoryService.editInventory(inventoryDto));
     }
 
     @Test public void editInventory_UserNotFoundException(){
         when(inventoryRepository.existsById(inventory.getId())).thenReturn(true);
 
         Assertions.assertThrows(UserNotFoundException.class,
-                ()-> inventoryService.editInventory(inventory));
+                ()-> inventoryService.editInventory(inventoryDto));
     }
 
     @Test

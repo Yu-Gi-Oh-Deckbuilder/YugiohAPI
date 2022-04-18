@@ -2,6 +2,7 @@ package com.revature.main.service;
 
 
 import com.revature.main.dao.InventoryRepository;
+import com.revature.main.dto.InventoryDto;
 import com.revature.main.exceptions.CollectionDoesNotExistException;
 import com.revature.main.exceptions.UserNotFoundException;
 import com.revature.main.model.Inventory;
@@ -33,7 +34,7 @@ public class InventoryService extends EntityService{
     }
 
     @Transactional
-    public Inventory editInventory(Inventory inventory) throws UserNotFoundException, CollectionDoesNotExistException{
+    public Inventory editInventory(InventoryDto inventory) throws UserNotFoundException, CollectionDoesNotExistException{
 
         if(!inventoryRepository.existsById((inventory.getId()))){
             throw new CollectionDoesNotExistException("Inventory with id "+inventory.getId()+" does not exist");

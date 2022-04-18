@@ -1,7 +1,10 @@
 package com.revature.main.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.revature.main.dto.DeckDto;
+import com.revature.main.dto.InventoryDto;
 import com.revature.main.dto.UserDto;
+import com.revature.main.dto.WishlistDto;
 import com.revature.main.exceptions.CardAmountDoesNotExistException;
 import com.revature.main.exceptions.CollectionDoesNotExistException;
 import com.revature.main.exceptions.UnAuthorizedException;
@@ -128,7 +131,7 @@ public class CollectionController {
 
 
     @PostMapping("/wishlists")
-    public ResponseEntity<?> createWishlist(@RequestBody Wishlist wishlist, @RequestHeader("Authorization") String token) throws JsonProcessingException {
+    public ResponseEntity<?> createWishlist(@RequestBody WishlistDto wishlist, @RequestHeader("Authorization") String token) throws JsonProcessingException {
         int userId = wishlist.getOwner().getId();
         if(!returnFalseIfUserIdMismatch(userId, token)) ResponseEntity.status(401).body(UNAUTHORIZED);
         try{
@@ -142,7 +145,7 @@ public class CollectionController {
     }
 
    @PostMapping("/decks")
-    public ResponseEntity<?> createDeck(@RequestBody Deck deck, @RequestHeader("Authorization") String token) throws JsonProcessingException {
+    public ResponseEntity<?> createDeck(@RequestBody DeckDto deck, @RequestHeader("Authorization") String token) throws JsonProcessingException {
        int userId = deck.getOwner().getId();
        if(!returnFalseIfUserIdMismatch(userId, token)) ResponseEntity.status(401).body(UNAUTHORIZED);
         try{
@@ -184,7 +187,7 @@ public class CollectionController {
     }
 
     @PatchMapping("/wishlists")
-    public ResponseEntity<?> editWishlistById(@RequestBody Wishlist wishlist, @RequestHeader("Authorization") String token) throws JsonProcessingException {
+    public ResponseEntity<?> editWishlistById(@RequestBody WishlistDto wishlist, @RequestHeader("Authorization") String token) throws JsonProcessingException {
         int userId = wishlist.getOwner().getId();
         if(!returnFalseIfUserIdMismatch(userId, token)) ResponseEntity.status(401).body(UNAUTHORIZED);
         try{
@@ -196,7 +199,7 @@ public class CollectionController {
     }
 
    @PatchMapping("/decks")
-    public ResponseEntity<?> editDeck(@RequestBody Deck deck, @RequestHeader("Authorization") String token) throws JsonProcessingException {
+    public ResponseEntity<?> editDeck(@RequestBody DeckDto deck, @RequestHeader("Authorization") String token) throws JsonProcessingException {
        int userId = deck.getOwner().getId();
        if(!returnFalseIfUserIdMismatch(userId, token)) ResponseEntity.status(401).body(UNAUTHORIZED);
         try{
@@ -208,7 +211,7 @@ public class CollectionController {
     }
 
     @PatchMapping("/inventory")
-    public ResponseEntity<?> editInventory(@RequestBody Inventory inventory, @RequestHeader("Authorization") String token) throws JsonProcessingException {
+    public ResponseEntity<?> editInventory(@RequestBody InventoryDto inventory, @RequestHeader("Authorization") String token) throws JsonProcessingException {
         int userId = inventory.getOwner().getId();
         if(!returnFalseIfUserIdMismatch(userId, token)) ResponseEntity.status(401).body(UNAUTHORIZED);
         try{
