@@ -64,11 +64,11 @@ export class WishlistDetailComponent implements OnInit {
       {
         next:card => {
           this.cardToAdd = card;
-          
-          //object is not extendible
-
-          //this.wishlist.cards.push();
-          //this.wishlistService.editWishlist(this.wishlist);
+        
+          // console.log('cardtoBeAdded');
+          // console.log(this.cardToAdd);
+          // this.wishlist.cards.push();
+          // this.wishlistService.editWishlist(this.wishlist);
           }
           
       }

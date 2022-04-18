@@ -5,6 +5,7 @@
 <div *ngFor="let card of dataSource;">
     <mat-card class="card">
         <img mat-card-image [src]="card.card_images[0].image_url" [alt]="card.name">
+
         <mat-card-actions>
             <button mat-button color="warn"> 
                 <mat-icon>
@@ -14,3 +15,5 @@
         </mat-card-actions>
         </mat-card>
 </div>
+
+
