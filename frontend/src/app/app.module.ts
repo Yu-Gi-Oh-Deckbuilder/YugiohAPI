@@ -26,12 +26,13 @@ import { HomepageComponent } from './homepage/homepage.component';
 import { CardEffects } from './shared/service/card/state';
 import { WishlistsComponent } from './wishlists/wishlists.component';
 import { WishlistDetailComponent } from './wishlist-detail/wishlist-detail.component';
-import { WishlistsActions, WishlistsEffects } from './shared/service/wishlist/state';
+import { WishlistsEffects } from './shared/service/wishlist/state';
 import { GalleryComponent } from './gallery/gallery.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
+import { JwtModule } from '@auth0/angular-jwt';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,7 @@ import { LayoutModule } from '@angular/cdk/layout';
     HomepageComponent,
     WishlistsComponent,
     WishlistDetailComponent,
-    GalleryComponent
+    GalleryComponent,
   ],
   imports: [
     BrowserModule,
@@ -67,7 +68,14 @@ import { LayoutModule } from '@angular/cdk/layout';
     MatGridListModule,
     MatMenuModule,
     MatButtonModule,
-    LayoutModule
+    LayoutModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: () => localStorage.getItem('jwt'),
+        allowedDomains: ['localhost:9011'],
+        disallowedRoutes: ['localhost:9011/login'],
+      },
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent]
